@@ -1,1272 +1,3411 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lessonify — приложение для репетиторов</title>
-  <link rel="icon" type="image/png" href="logo.png?v=2" />
-  <link rel="apple-touch-icon" href="logo.png?v=2" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary: '#6C63FF',
-            'primary-dark': '#5A52D5',
-            'primary-light': '#8B85FF',
-          },
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
-        }
-      }
-    }
-  </script>
-  <style>
-    * { font-family: 'Inter', sans-serif; }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Lessonify — приложение для репетиторов</title>
+		<link rel="icon" type="image/png" href="logo.png?v=2" />
+		<link rel="apple-touch-icon" href="logo.png?v=2" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			tailwind.config = {
+				darkMode: 'class',
+				theme: {
+					extend: {
+						colors: {
+							primary: '#6C63FF',
+							'primary-dark': '#5A52D5',
+							'primary-light': '#8B85FF',
+						},
+						fontFamily: { sans: ['Inter', 'sans-serif'] },
+					},
+				},
+			}
+		</script>
+		<style>
+			* {
+				font-family: 'Inter', sans-serif;
+			}
 
-    /* Hero grid background */
-    .hero-bg {
-      background-color: #faf9ff;
-      background-image:
-        linear-gradient(135deg, rgba(108,99,255,0.08) 0%, rgba(200,150,255,0.08) 40%, rgba(255,180,200,0.06) 100%),
-        linear-gradient(rgba(108,99,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(108,99,255,0.06) 1px, transparent 1px);
-      background-size: 100% 100%, 40px 40px, 40px 40px;
-    }
-    .dark .hero-bg {
-      background-color: #0f0e1e;
-      background-image:
-        linear-gradient(135deg, rgba(108,99,255,0.12) 0%, rgba(120,80,200,0.1) 40%, rgba(80,50,150,0.08) 100%),
-        linear-gradient(rgba(108,99,255,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(108,99,255,0.08) 1px, transparent 1px);
-    }
+			/* Hero grid background */
+			.hero-bg {
+				background-color: #faf9ff;
+				background-image:
+					linear-gradient(
+						135deg,
+						rgba(108, 99, 255, 0.08) 0%,
+						rgba(200, 150, 255, 0.08) 40%,
+						rgba(255, 180, 200, 0.06) 100%
+					),
+					linear-gradient(rgba(108, 99, 255, 0.06) 1px, transparent 1px),
+					linear-gradient(90deg, rgba(108, 99, 255, 0.06) 1px, transparent 1px);
+				background-size:
+					100% 100%,
+					40px 40px,
+					40px 40px;
+			}
+			.dark .hero-bg {
+				background-color: #0f0e1e;
+				background-image:
+					linear-gradient(
+						135deg,
+						rgba(108, 99, 255, 0.12) 0%,
+						rgba(120, 80, 200, 0.1) 40%,
+						rgba(80, 50, 150, 0.08) 100%
+					),
+					linear-gradient(rgba(108, 99, 255, 0.08) 1px, transparent 1px),
+					linear-gradient(90deg, rgba(108, 99, 255, 0.08) 1px, transparent 1px);
+			}
 
-    /* Floating blobs */
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.35;
-      pointer-events: none;
-    }
+			/* Floating blobs */
+			.blob {
+				position: absolute;
+				border-radius: 50%;
+				filter: blur(60px);
+				opacity: 0.35;
+				pointer-events: none;
+			}
 
-    /* Phone mockup */
-    .phone-frame {
-      width: 260px;
-      height: 540px;
-      background: #1a1a2e;
-      border-radius: 40px;
-      border: 8px solid #2d2d44;
-      box-shadow: 0 40px 80px rgba(108,99,255,0.3), 0 0 0 1px rgba(255,255,255,0.1);
-      overflow: hidden;
-      position: relative;
-    }
-    .phone-notch {
-      width: 80px; height: 24px;
-      background: #1a1a2e;
-      border-radius: 0 0 16px 16px;
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      z-index: 10;
-    }
-    .phone-screen {
-      width: 100%; height: 100%;
-      background: #0f0f1e;
-      overflow: hidden;
-    }
+			/* Phone mockup */
+			.phone-frame {
+				width: 260px;
+				height: 540px;
+				background: #1a1a2e;
+				border-radius: 40px;
+				border: 8px solid #2d2d44;
+				box-shadow:
+					0 40px 80px rgba(108, 99, 255, 0.3),
+					0 0 0 1px rgba(255, 255, 255, 0.1);
+				overflow: hidden;
+				position: relative;
+			}
+			.phone-notch {
+				width: 80px;
+				height: 24px;
+				background: #1a1a2e;
+				border-radius: 0 0 16px 16px;
+				position: absolute;
+				top: 0;
+				left: 50%;
+				transform: translateX(-50%);
+				z-index: 10;
+			}
+			.phone-screen {
+				width: 100%;
+				height: 100%;
+				background: #0f0f1e;
+				overflow: hidden;
+			}
 
-    /* Gradient text */
-    .gradient-text {
-      background: linear-gradient(135deg, #6C63FF 0%, #a855f7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+			/* Gradient text */
+			.gradient-text {
+				background: linear-gradient(135deg, #6c63ff 0%, #a855f7 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
 
-    /* Feature card hover */
-    .feature-card { transition: transform 0.2s, box-shadow 0.2s; }
-    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(108,99,255,0.12); }
+			/* Feature card hover */
+			.feature-card {
+				transition:
+					transform 0.2s,
+					box-shadow 0.2s;
+			}
+			.feature-card:hover {
+				transform: translateY(-4px);
+				box-shadow: 0 16px 40px rgba(108, 99, 255, 0.12);
+			}
 
-    /* Testimonial card */
-    .testimonial-track {
-      display: flex;
-      gap: 24px;
-      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
+			/* Testimonial card */
+			.testimonial-track {
+				display: flex;
+				gap: 24px;
+				transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			}
 
-    /* FAQ smooth accordion using grid trick */
-    .accordion-inner {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .accordion-inner.open { grid-template-rows: 1fr; }
-    .accordion-inner > div { overflow: hidden; }
-    .accordion-icon { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: inline-block; }
-    .accordion-icon.open { transform: rotate(45deg); }
+			/* FAQ smooth accordion using grid trick */
+			.accordion-inner {
+				display: grid;
+				grid-template-rows: 0fr;
+				transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+			.accordion-inner.open {
+				grid-template-rows: 1fr;
+			}
+			.accordion-inner > div {
+				overflow: hidden;
+			}
+			.accordion-icon {
+				transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				display: inline-block;
+			}
+			.accordion-icon.open {
+				transform: rotate(45deg);
+			}
 
-    /* Pricing toggle */
-    .plan-badge {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+			/* Pricing toggle */
+			.plan-badge {
+				position: absolute;
+				top: -14px;
+				left: 50%;
+				transform: translateX(-50%);
+			}
 
-    /* Scroll animations */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
+			/* Scroll animations */
+			.fade-up {
+				opacity: 0;
+				transform: translateY(30px);
+				transition:
+					opacity 0.6s ease,
+					transform 0.6s ease;
+			}
+			.fade-up.visible {
+				opacity: 1;
+				transform: translateY(0);
+			}
 
-    /* Animated floating cubes */
-    @keyframes float-cube-1 {
-      0%, 100% { transform: rotate(12deg) translateY(0px) translateX(0px); }
-      33% { transform: rotate(18deg) translateY(-12px) translateX(4px); }
-      66% { transform: rotate(8deg) translateY(-6px) translateX(-4px); }
-    }
-    @keyframes float-cube-2 {
-      0%, 100% { transform: rotate(45deg) translateY(0px) scale(1); }
-      50% { transform: rotate(52deg) translateY(-10px) scale(1.05); }
-    }
-    @keyframes float-cube-3 {
-      0%, 100% { transform: rotate(6deg) translateY(0px) translateX(0px); }
-      40% { transform: rotate(-2deg) translateY(-8px) translateX(6px); }
-      80% { transform: rotate(10deg) translateY(-4px) translateX(-3px); }
-    }
-    @keyframes float-cube-4 {
-      0%, 100% { transform: rotate(-12deg) translateY(0px); }
-      50% { transform: rotate(-6deg) translateY(-14px); }
-    }
-    @keyframes float-cube-5 {
-      0%, 100% { transform: rotate(20deg) scale(1) translateY(0px); }
-      50% { transform: rotate(28deg) scale(1.1) translateY(-8px); }
-    }
-    @keyframes float-cube-6 {
-      0%, 100% { transform: rotate(-20deg) translateY(0px) translateX(0px); }
-      33% { transform: rotate(-14deg) translateY(-16px) translateX(5px); }
-      66% { transform: rotate(-24deg) translateY(-8px) translateX(-3px); }
-    }
+			/* Animated floating cubes */
+			@keyframes float-cube-1 {
+				0%,
+				100% {
+					transform: rotate(12deg) translateY(0px) translateX(0px);
+				}
+				33% {
+					transform: rotate(18deg) translateY(-12px) translateX(4px);
+				}
+				66% {
+					transform: rotate(8deg) translateY(-6px) translateX(-4px);
+				}
+			}
+			@keyframes float-cube-2 {
+				0%,
+				100% {
+					transform: rotate(45deg) translateY(0px) scale(1);
+				}
+				50% {
+					transform: rotate(52deg) translateY(-10px) scale(1.05);
+				}
+			}
+			@keyframes float-cube-3 {
+				0%,
+				100% {
+					transform: rotate(6deg) translateY(0px) translateX(0px);
+				}
+				40% {
+					transform: rotate(-2deg) translateY(-8px) translateX(6px);
+				}
+				80% {
+					transform: rotate(10deg) translateY(-4px) translateX(-3px);
+				}
+			}
+			@keyframes float-cube-4 {
+				0%,
+				100% {
+					transform: rotate(-12deg) translateY(0px);
+				}
+				50% {
+					transform: rotate(-6deg) translateY(-14px);
+				}
+			}
+			@keyframes float-cube-5 {
+				0%,
+				100% {
+					transform: rotate(20deg) scale(1) translateY(0px);
+				}
+				50% {
+					transform: rotate(28deg) scale(1.1) translateY(-8px);
+				}
+			}
+			@keyframes float-cube-6 {
+				0%,
+				100% {
+					transform: rotate(-20deg) translateY(0px) translateX(0px);
+				}
+				33% {
+					transform: rotate(-14deg) translateY(-16px) translateX(5px);
+				}
+				66% {
+					transform: rotate(-24deg) translateY(-8px) translateX(-3px);
+				}
+			}
 
-    .cube-1 { animation: float-cube-1 5s ease-in-out infinite; }
-    .cube-2 { animation: float-cube-2 6s ease-in-out infinite; animation-delay: 0.5s; }
-    .cube-3 { animation: float-cube-3 4.5s ease-in-out infinite; animation-delay: 1s; }
-    .cube-4 { animation: float-cube-4 7s ease-in-out infinite; animation-delay: 0.3s; }
-    .cube-5 { animation: float-cube-5 5.5s ease-in-out infinite; animation-delay: 1.5s; }
-    .cube-6 { animation: float-cube-6 6.5s ease-in-out infinite; animation-delay: 0.8s; }
+			.cube-1 {
+				animation: float-cube-1 5s ease-in-out infinite;
+			}
+			.cube-2 {
+				animation: float-cube-2 6s ease-in-out infinite;
+				animation-delay: 0.5s;
+			}
+			.cube-3 {
+				animation: float-cube-3 4.5s ease-in-out infinite;
+				animation-delay: 1s;
+			}
+			.cube-4 {
+				animation: float-cube-4 7s ease-in-out infinite;
+				animation-delay: 0.3s;
+			}
+			.cube-5 {
+				animation: float-cube-5 5.5s ease-in-out infinite;
+				animation-delay: 1.5s;
+			}
+			.cube-6 {
+				animation: float-cube-6 6.5s ease-in-out infinite;
+				animation-delay: 0.8s;
+			}
 
-    /* Comparison tabs */
-    .compare-tab { transition: all 0.2s; }
-    .compare-col { transition: opacity 0.2s; }
+			/* Comparison tabs */
+			.compare-tab {
+				transition: all 0.2s;
+			}
+			.compare-col {
+				transition: opacity 0.2s;
+			}
 
-    /* App screen simulation */
-    .app-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-    }
+			/* App screen simulation */
+			.app-card {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 16px;
+				backdrop-filter: blur(10px);
+			}
 
-    .btn-primary {
-      background: #6C63FF;
-      color: white;
-      padding: 12px 28px;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 15px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-    }
-    .btn-primary:hover { background: #5A52D5; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(108,99,255,0.35); }
+			.btn-primary {
+				background: #6c63ff;
+				color: white;
+				padding: 12px 28px;
+				border-radius: 100px;
+				font-weight: 600;
+				font-size: 15px;
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				transition: all 0.2s;
+				cursor: pointer;
+				border: none;
+				text-decoration: none;
+			}
+			.btn-primary:hover {
+				background: #5a52d5;
+				transform: translateY(-1px);
+				box-shadow: 0 8px 24px rgba(108, 99, 255, 0.35);
+			}
 
-    .btn-outline {
-      background: white;
-      color: #1a1a2e;
-      padding: 12px 28px;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 15px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1.5px solid #e2e0f0;
-      transition: all 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .btn-outline:hover { border-color: #6C63FF; color: #6C63FF; transform: translateY(-1px); }
-    .dark .btn-outline { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.15); }
-    .dark .btn-outline:hover { border-color: #6C63FF; color: #8B85FF; }
-  </style>
-</head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-x-hidden transition-colors duration-300">
-
-<!-- ══════════════════════════════════════════════════════════════
+			.btn-outline {
+				background: white;
+				color: #1a1a2e;
+				padding: 12px 28px;
+				border-radius: 100px;
+				font-weight: 600;
+				font-size: 15px;
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				border: 1.5px solid #e2e0f0;
+				transition: all 0.2s;
+				cursor: pointer;
+				text-decoration: none;
+			}
+			.btn-outline:hover {
+				border-color: #6c63ff;
+				color: #6c63ff;
+				transform: translateY(-1px);
+			}
+			.dark .btn-outline {
+				background: rgba(255, 255, 255, 0.05);
+				color: white;
+				border-color: rgba(255, 255, 255, 0.15);
+			}
+			.dark .btn-outline:hover {
+				border-color: #6c63ff;
+				color: #8b85ff;
+			}
+		</style>
+	</head>
+	<body
+		class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-x-hidden transition-colors duration-300"
+	>
+		<!-- ══════════════════════════════════════════════════════════════
      NAVBAR
 ══════════════════════════════════════════════════════════════ -->
-<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
-  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-    <!-- Logo -->
-    <a href="#" class="flex items-center gap-2">
-      <img src="logo.png" alt="Lessonify" class="w-9 h-9 rounded-xl" />
-      <span class="font-bold text-lg text-gray-900 dark:text-white">Lessonify</span>
-    </a>
+		<nav
+			class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800"
+		>
+			<div
+				class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between"
+			>
+				<!-- Logo -->
+				<a href="#" class="flex items-center gap-2">
+					<img src="logo.png" alt="Lessonify" class="w-9 h-9 rounded-xl" />
+					<span class="font-bold text-lg text-gray-900 dark:text-white"
+						>Lessonify</span
+					>
+				</a>
 
-    <!-- Nav links -->
-    <div class="hidden md:flex items-center gap-8">
-      <a href="#features" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">Возможности</a>
-      <a href="#compare" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">Сравнение</a>
-      <a href="#pricing" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">Тарифы</a>
-      <a href="#faq" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">FAQ</a>
-    </div>
+				<!-- Nav links -->
+				<div class="hidden lg:flex items-center gap-8">
+					<a
+						href="#features"
+						data-i18n="nav_features"
+						class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+						>Возможности</a
+					>
+					<a
+						href="#compare"
+						data-i18n="nav_compare"
+						class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+						>Сравнение</a
+					>
+					<a
+						href="#pricing"
+						data-i18n="nav_pricing"
+						class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+						>Тарифы</a
+					>
+					<a
+						href="#faq"
+						data-i18n="nav_faq"
+						class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+						>FAQ</a
+					>
+				</div>
 
-    <!-- CTA + theme toggle -->
-    <div class="flex items-center gap-3">
-      <!-- Theme toggle -->
-      <button id="theme-toggle" onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Сменить тему">
-        <!-- Sun (light mode icon) -->
-        <svg id="icon-sun" class="hidden" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <!-- Moon (dark mode icon) -->
-        <svg id="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+				<!-- CTA + lang toggle + theme toggle -->
+				<div class="flex items-center gap-3">
+					<!-- Language toggle -->
+					<button
+						id="lang-toggle"
+						onclick="toggleLang()"
+						class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-700"
+					>
+						RU
+					</button>
 
-      <a href="https://app.lessonify.ru" target="_blank" class="hidden md:flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-        Войти
-      </a>
-      <a href="https://app.lessonify.ru" class="btn-primary text-sm py-2.5 px-5">Попробовать бесплатно</a>
-    </div>
-  </div>
-</nav>
+					<!-- Theme toggle -->
+					<button
+						id="theme-toggle"
+						onclick="toggleTheme()"
+						class="w-9 h-9 rounded-full flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+						title="Сменить тему"
+					>
+						<svg
+							id="icon-sun"
+							class="hidden"
+							width="18"
+							height="18"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							viewBox="0 0 24 24"
+						>
+							<circle cx="12" cy="12" r="5" />
+							<line x1="12" y1="1" x2="12" y2="3" />
+							<line x1="12" y1="21" x2="12" y2="23" />
+							<line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+							<line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+							<line x1="1" y1="12" x2="3" y2="12" />
+							<line x1="21" y1="12" x2="23" y2="12" />
+							<line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+							<line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+						</svg>
+						<svg
+							id="icon-moon"
+							width="18"
+							height="18"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							viewBox="0 0 24 24"
+						>
+							<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+						</svg>
+					</button>
 
-<!-- ══════════════════════════════════════════════════════════════
+					<a
+						href="https://app.lessonify.ru"
+						target="_blank"
+						class="hidden lg:flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+					>
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+							<path
+								d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+							/>
+						</svg>
+						<span data-i18n="nav_login">Войти</span>
+					</a>
+					<a
+						href="https://app.lessonify.ru"
+						data-i18n="nav_cta"
+						class="btn-primary text-sm py-2.5 px-5 hidden lg:inline-flex"
+						>Попробовать бесплатно</a
+					>
+
+					<!-- Burger menu button (mobile + tablet) -->
+					<button
+						id="burger-btn"
+						onclick="toggleMobileMenu()"
+						class="lg:hidden w-9 h-9 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+					>
+						<svg
+							id="burger-icon"
+							width="20"
+							height="20"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							viewBox="0 0 24 24"
+						>
+							<line x1="3" y1="6" x2="21" y2="6" />
+							<line x1="3" y1="12" x2="21" y2="12" />
+							<line x1="3" y1="18" x2="21" y2="18" />
+						</svg>
+						<svg
+							id="close-icon"
+							class="hidden"
+							width="20"
+							height="20"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							viewBox="0 0 24 24"
+						>
+							<line x1="18" y1="6" x2="6" y2="18" />
+							<line x1="6" y1="6" x2="18" y2="18" />
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			<!-- Mobile menu -->
+			<div
+				id="mobile-menu"
+				class="hidden lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-100 dark:border-gray-800"
+			>
+				<div class="px-6 py-4 space-y-1">
+					<a
+						href="#features"
+						onclick="closeMobileMenu()"
+						data-i18n="nav_features"
+						class="block py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
+						>Возможности</a
+					>
+					<a
+						href="#compare"
+						onclick="closeMobileMenu()"
+						data-i18n="nav_compare"
+						class="block py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
+						>Сравнение</a
+					>
+					<a
+						href="#pricing"
+						onclick="closeMobileMenu()"
+						data-i18n="nav_pricing"
+						class="block py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
+						>Тарифы</a
+					>
+					<a
+						href="#faq"
+						onclick="closeMobileMenu()"
+						data-i18n="nav_faq"
+						class="block py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
+						>FAQ</a
+					>
+					<div
+						class="pt-3 border-t border-gray-100 dark:border-gray-800 flex flex-col gap-3"
+					>
+						<a
+							href="https://app.lessonify.ru"
+							target="_blank"
+							class="flex items-center gap-2 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
+						>
+							<svg
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="currentColor"
+							>
+								<path
+									d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+								/>
+							</svg>
+							<span data-i18n="nav_login">Войти</span>
+						</a>
+						<a
+							href="https://app.lessonify.ru"
+							data-i18n="nav_cta"
+							class="btn-primary text-center justify-center"
+							>Попробовать бесплатно</a
+						>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- ══════════════════════════════════════════════════════════════
      HERO
 ══════════════════════════════════════════════════════════════ -->
-<section class="hero-bg pt-32 pb-20 relative overflow-hidden">
-  <!-- Background blobs -->
-  <div class="blob w-96 h-96 bg-purple-300 dark:bg-purple-900 top-0 -left-32"></div>
-  <div class="blob w-80 h-80 bg-pink-200 dark:bg-purple-800 top-20 right-0"></div>
-  <div class="blob w-64 h-64 bg-blue-200 dark:bg-blue-900 bottom-0 left-1/3"></div>
+		<section
+			class="hero-bg pt-24 sm:pt-32 pb-12 sm:pb-20 relative overflow-hidden"
+		>
+			<!-- Background blobs -->
+			<div
+				class="blob w-96 h-96 bg-purple-300 dark:bg-purple-900 top-0 -left-32"
+			></div>
+			<div
+				class="blob w-80 h-80 bg-pink-200 dark:bg-purple-800 top-20 right-0"
+			></div>
+			<div
+				class="blob w-64 h-64 bg-blue-200 dark:bg-blue-900 bottom-0 left-1/3"
+			></div>
 
-  <!-- Animated floating cubes -->
-  <div class="absolute top-24 left-16 w-8 h-8 bg-primary/15 dark:bg-primary/20 rounded-lg cube-1"></div>
-  <div class="absolute top-48 left-8 w-5 h-5 bg-primary/20 dark:bg-primary/25 rounded cube-2"></div>
-  <div class="absolute top-20 right-32 w-6 h-6 bg-purple-400/30 dark:bg-purple-500/30 rounded-lg cube-3"></div>
-  <div class="absolute top-64 right-16 w-10 h-10 bg-pink-300/30 dark:bg-pink-500/20 rounded-xl cube-4"></div>
-  <div class="absolute top-40 left-1/3 w-4 h-4 bg-primary/10 dark:bg-primary/20 rounded-md cube-5"></div>
-  <div class="absolute bottom-24 right-1/4 w-7 h-7 bg-purple-300/25 dark:bg-purple-600/25 rounded-lg cube-6"></div>
+			<!-- Animated floating cubes -->
+			<div
+				class="absolute top-24 left-16 w-8 h-8 bg-primary/15 dark:bg-primary/20 rounded-lg cube-1 hidden sm:block"
+			></div>
+			<div
+				class="absolute top-48 left-8 w-5 h-5 bg-primary/20 dark:bg-primary/25 rounded cube-2 hidden sm:block"
+			></div>
+			<div
+				class="absolute top-20 right-32 w-6 h-6 bg-purple-400/30 dark:bg-purple-500/30 rounded-lg cube-3 hidden sm:block"
+			></div>
+			<div
+				class="absolute top-64 right-16 w-10 h-10 bg-pink-300/30 dark:bg-pink-500/20 rounded-xl cube-4 hidden sm:block"
+			></div>
+			<div
+				class="absolute top-40 left-1/3 w-4 h-4 bg-primary/10 dark:bg-primary/20 rounded-md cube-5 hidden sm:block"
+			></div>
+			<div
+				class="absolute bottom-24 right-1/4 w-7 h-7 bg-purple-300/25 dark:bg-purple-600/25 rounded-lg cube-6 hidden sm:block"
+			></div>
 
-  <div class="max-w-7xl mx-auto px-6 relative">
-    <!-- Badge -->
-    <div class="flex justify-center mb-8">
-      <div class="inline-flex items-center gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full px-4 py-2 text-sm shadow-sm">
-        <span class="bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 text-xs font-semibold px-2 py-0.5 rounded-full">Новинка</span>
-        <span class="text-gray-600 dark:text-gray-300">Telegram-напоминания для учеников</span>
-        <a href="https://app.lessonify.ru" target="_blank" class="text-primary font-medium">Попробовать →</a>
-      </div>
-    </div>
+			<div class="max-w-7xl mx-auto px-6 relative">
+				<!-- Badge -->
+				<div class="flex justify-center mb-8">
+					<div
+						class="inline-flex items-center gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm shadow-sm"
+					>
+						<span
+							data-i18n="badge_new"
+							class="bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 text-xs font-semibold px-2 py-0.5 rounded-full"
+							>Новинка</span
+						>
+						<span
+							data-i18n="badge_text"
+							class="text-gray-600 dark:text-gray-300 hidden sm:inline"
+							>Telegram-напоминания для учеников</span
+						>
+						<span
+							data-i18n="badge_text_short"
+							class="text-gray-600 dark:text-gray-300 sm:hidden"
+							>Telegram-напоминания</span
+						>
+						<a
+							href="https://app.lessonify.ru"
+							target="_blank"
+							data-i18n="badge_try"
+							class="text-primary font-medium"
+							>Попробовать →</a
+						>
+					</div>
+				</div>
 
-    <!-- Headline -->
-    <div class="text-center mb-6">
-      <h1 class="text-5xl md:text-7xl font-black text-gray-900 dark:text-white leading-tight tracking-tight">
-        Всё управление<br/>
-        <span class="gradient-text">репетиторством</span><br/>
-        в одном месте
-      </h1>
-    </div>
+				<!-- Headline -->
+				<div class="text-center mb-6">
+					<h1
+						class="text-3xl sm:text-5xl md:text-7xl font-black text-gray-900 dark:text-white leading-tight tracking-tight"
+					>
+						<span data-i18n="hero_line1">Всё управление</span><br />
+						<span class="gradient-text" data-i18n="hero_line2"
+							>репетиторством</span
+						><br />
+						<span data-i18n="hero_line3">в одном месте</span>
+					</h1>
+				</div>
 
-    <p class="text-center text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto mb-10 leading-relaxed">
-      Расписание, оплаты, домашние задания, ученики и Telegram-уведомления —
-      всё в одном приложении. Работает с телефона за 2 минуты в день.
-    </p>
+				<p
+					data-i18n="hero_desc"
+					class="text-center text-base sm:text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2"
+				>
+					Расписание, оплаты, домашние задания, ученики и Telegram-уведомления —
+					всё в одном приложении. Работает с телефона за 2 минуты в день.
+				</p>
 
-    <!-- CTA buttons -->
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-      <a href="https://t.me/lessonify_bot" target="_blank" class="btn-outline flex items-center gap-2">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#0088cc"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-        Telegram-бот
-      </a>
-      <a href="https://app.lessonify.ru" class="btn-primary">
-        Открыть приложение
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
+				<!-- CTA buttons -->
+				<div
+					class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 sm:mb-16"
+				>
+					<a
+						href="https://t.me/lessonify_bot"
+						target="_blank"
+						class="btn-outline flex items-center gap-2"
+					>
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="#0088cc">
+							<path
+								d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+							/>
+						</svg>
+						<span data-i18n="hero_btn_tg">Telegram-бот</span>
+					</a>
+					<a href="https://app.lessonify.ru" class="btn-primary">
+						<span data-i18n="hero_btn_app">Открыть приложение</span>
+						<svg
+							width="16"
+							height="16"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.5"
+							viewBox="0 0 24 24"
+						>
+							<path d="M5 12h14M12 5l7 7-7 7" />
+						</svg>
+					</a>
+				</div>
 
-    <!-- Phone mockup + floating cards -->
-    <div class="relative flex justify-center">
-      <!-- Floating left card -->
-      <div class="absolute left-0 top-1/4 hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 w-52 z-10 border border-gray-100 dark:border-gray-700">
-        <div class="flex items-center gap-2 mb-3">
-          <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center">
-            <svg width="14" height="14" fill="none" stroke="#10B981" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-          </div>
-          <div>
-            <p class="text-xs font-semibold text-gray-900 dark:text-white">Оплата получена</p>
-            <p class="text-xs text-gray-400">Анна Смирнова</p>
-          </div>
-        </div>
-        <div class="text-xl font-black text-gray-900 dark:text-white">+1 500 ₽</div>
-        <p class="text-xs text-gray-400 mt-0.5">Урок математики</p>
-      </div>
+				<!-- Phone mockup + floating cards -->
+				<div class="relative flex justify-center">
+					<!-- Floating left card -->
+					<div
+						class="absolute left-0 top-1/4 hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 w-52 z-10 border border-gray-100 dark:border-gray-700"
+					>
+						<div class="flex items-center gap-2 mb-3">
+							<div
+								class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center"
+							>
+								<svg
+									width="14"
+									height="14"
+									fill="none"
+									stroke="#10B981"
+									stroke-width="2.5"
+									viewBox="0 0 24 24"
+								>
+									<path d="M20 6L9 17l-5-5" />
+								</svg>
+							</div>
+							<div>
+								<p
+									data-i18n="card_payment_title"
+									class="text-xs font-semibold text-gray-900 dark:text-white"
+								>
+									Оплата получена
+								</p>
+								<p data-i18n="card_payment_name" class="text-xs text-gray-400">
+									Анна Смирнова
+								</p>
+							</div>
+						</div>
+						<div class="text-xl font-black text-gray-900 dark:text-white">
+							+1 500 ₽
+						</div>
+						<p
+							data-i18n="card_payment_subject"
+							class="text-xs text-gray-400 mt-0.5"
+						>
+							Урок математики
+						</p>
+					</div>
 
-      <!-- Floating right card -->
-      <div class="absolute right-0 top-12 hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 w-48 z-10 border border-gray-100 dark:border-gray-700">
-        <p class="text-xs text-gray-400 mb-2">Этот месяц</p>
-        <div class="text-2xl font-black text-gray-900 dark:text-white">24 700 ₽</div>
-        <div class="flex items-center gap-1 mt-1">
-          <span class="text-xs font-semibold text-green-500">+21%</span>
-          <span class="text-xs text-gray-400">к прошлому</span>
-        </div>
-        <div class="mt-3 space-y-1.5">
-          <div class="flex justify-between items-center">
-            <div class="h-2 bg-primary rounded-full w-3/4"></div>
-            <span class="text-xs text-gray-400 ml-2">74%</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <div class="h-2 bg-purple-200 rounded-full w-1/2"></div>
-            <span class="text-xs text-gray-400 ml-2">50%</span>
-          </div>
-        </div>
-      </div>
+					<!-- Floating right card -->
+					<div
+						class="absolute right-0 top-12 hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 w-48 z-10 border border-gray-100 dark:border-gray-700"
+					>
+						<p data-i18n="card_month" class="text-xs text-gray-400 mb-2">
+							Этот месяц
+						</p>
+						<div class="text-2xl font-black text-gray-900 dark:text-white">
+							24 700 ₽
+						</div>
+						<div class="flex items-center gap-1 mt-1">
+							<span class="text-xs font-semibold text-green-500">+21%</span>
+							<span data-i18n="card_vs_prev" class="text-xs text-gray-400"
+								>к прошлому</span
+							>
+						</div>
+						<div class="mt-3 space-y-1.5">
+							<div class="flex justify-between items-center">
+								<div class="h-2 bg-primary rounded-full w-3/4"></div>
+								<span class="text-xs text-gray-400 ml-2">74%</span>
+							</div>
+							<div class="flex justify-between items-center">
+								<div class="h-2 bg-purple-200 rounded-full w-1/2"></div>
+								<span class="text-xs text-gray-400 ml-2">50%</span>
+							</div>
+						</div>
+					</div>
 
-      <!-- Phone -->
-      <div class="phone-frame mx-auto">
-        <div class="phone-notch"></div>
-        <div class="phone-screen p-3 pt-8">
-          <!-- Status bar -->
-          <div class="flex justify-between items-center mb-4 px-1">
-            <span class="text-white/60 text-[10px]">9:41</span>
-            <div class="flex gap-1">
-              <div class="w-3 h-1.5 bg-white/60 rounded-sm"></div>
-              <div class="w-3 h-1.5 bg-white/60 rounded-sm"></div>
-              <div class="w-3 h-1.5 bg-white/40 rounded-sm"></div>
-            </div>
-          </div>
+					<!-- Phone -->
+					<div class="phone-frame mx-auto">
+						<div class="phone-notch"></div>
+						<div class="phone-screen p-3 pt-8">
+							<!-- Status bar -->
+							<div class="flex justify-between items-center mb-4 px-1">
+								<span class="text-white/60 text-[10px]">9:41</span>
+								<div class="flex gap-1">
+									<div class="w-3 h-1.5 bg-white/60 rounded-sm"></div>
+									<div class="w-3 h-1.5 bg-white/60 rounded-sm"></div>
+									<div class="w-3 h-1.5 bg-white/40 rounded-sm"></div>
+								</div>
+							</div>
 
-          <!-- Greeting -->
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <p class="text-white/50 text-[10px]">20 марта</p>
-              <p class="text-white text-sm font-bold">Добрый день, Иван</p>
-            </div>
-            <div class="w-8 h-8 rounded-full bg-primary/30 border-2 border-primary/50 overflow-hidden">
-              <div class="w-full h-full bg-gradient-to-br from-purple-400 to-blue-500"></div>
-            </div>
-          </div>
+							<!-- Greeting -->
+							<div class="flex items-center justify-between mb-4">
+								<div>
+									<p class="text-white/50 text-[10px]">20 марта</p>
+									<p class="text-white text-sm font-bold">Добрый день, Иван</p>
+								</div>
+								<div
+									class="w-8 h-8 rounded-full bg-primary/30 border-2 border-primary/50 overflow-hidden"
+								>
+									<div
+										class="w-full h-full bg-gradient-to-br from-purple-400 to-blue-500"
+									></div>
+								</div>
+							</div>
 
-          <!-- Next lesson card -->
-          <div class="rounded-2xl bg-gradient-to-r from-primary to-purple-500 p-3 mb-3">
-            <div class="flex justify-between items-start mb-2">
-              <p class="text-white/70 text-[9px] font-medium">БЛИЖАЙШИЙ УРОК</p>
-              <span class="bg-amber-400 text-amber-900 text-[8px] font-bold px-1.5 py-0.5 rounded-full">⏱ 45м</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-bold text-white">АС</div>
-              <div>
-                <p class="text-white text-[11px] font-bold">Аня Смирнова</p>
-                <p class="text-white/70 text-[9px]">Математика · 14:00–15:00</p>
-              </div>
-            </div>
-          </div>
+							<!-- Next lesson card -->
+							<div
+								class="rounded-2xl bg-gradient-to-r from-primary to-purple-500 p-3 mb-3"
+							>
+								<div class="flex justify-between items-start mb-2">
+									<p class="text-white/70 text-[9px] font-medium">
+										БЛИЖАЙШИЙ УРОК
+									</p>
+									<span
+										class="bg-amber-400 text-amber-900 text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+										>⏱ 45м</span
+									>
+								</div>
+								<div class="flex items-center gap-2">
+									<div
+										class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-bold text-white"
+									>
+										АС
+									</div>
+									<div>
+										<p class="text-white text-[11px] font-bold">Аня Смирнова</p>
+										<p class="text-white/70 text-[9px]">
+											Математика · 14:00–15:00
+										</p>
+									</div>
+								</div>
+							</div>
 
-          <!-- Today lessons -->
-          <div class="mb-3">
-            <div class="flex justify-between items-center mb-2">
-              <p class="text-white/60 text-[9px] font-semibold">СЕГОДНЯ</p>
-              <button class="text-primary text-[9px]">+ Добавить</button>
-            </div>
-            <div class="space-y-1.5">
-              <div class="app-card p-2 flex items-center gap-2">
-                <div class="w-1 h-8 bg-primary rounded-full"></div>
-                <div class="flex-1">
-                  <p class="text-white text-[10px] font-medium">Коля Петров</p>
-                  <p class="text-white/50 text-[9px]">Физика · 16:00</p>
-                </div>
-                <div class="w-4 h-4 rounded-full bg-green-500/20 flex items-center justify-center">
-                  <div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                </div>
-              </div>
-              <div class="app-card p-2 flex items-center gap-2">
-                <div class="w-1 h-8 bg-purple-400 rounded-full"></div>
-                <div class="flex-1">
-                  <p class="text-white text-[10px] font-medium">Маша Иванова</p>
-                  <p class="text-white/50 text-[9px]">Русский · 18:30</p>
-                </div>
-                <div class="text-[8px] text-amber-400 font-medium">Не опл.</div>
-              </div>
-            </div>
-          </div>
+							<!-- Today lessons -->
+							<div class="mb-3">
+								<div class="flex justify-between items-center mb-2">
+									<p class="text-white/60 text-[9px] font-semibold">СЕГОДНЯ</p>
+									<button class="text-primary text-[9px]">+ Добавить</button>
+								</div>
+								<div class="space-y-1.5">
+									<div class="app-card p-2 flex items-center gap-2">
+										<div class="w-1 h-8 bg-primary rounded-full"></div>
+										<div class="flex-1">
+											<p class="text-white text-[10px] font-medium">
+												Коля Петров
+											</p>
+											<p class="text-white/50 text-[9px]">Физика · 16:00</p>
+										</div>
+										<div
+											class="w-4 h-4 rounded-full bg-green-500/20 flex items-center justify-center"
+										>
+											<div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+										</div>
+									</div>
+									<div class="app-card p-2 flex items-center gap-2">
+										<div class="w-1 h-8 bg-purple-400 rounded-full"></div>
+										<div class="flex-1">
+											<p class="text-white text-[10px] font-medium">
+												Маша Иванова
+											</p>
+											<p class="text-white/50 text-[9px]">Русский · 18:30</p>
+										</div>
+										<div class="text-[8px] text-amber-400 font-medium">
+											Не опл.
+										</div>
+									</div>
+								</div>
+							</div>
 
-          <!-- Bottom nav -->
-          <div class="absolute bottom-0 left-0 right-0 bg-gray-900/80 backdrop-blur border-t border-white/5 flex justify-around py-2 px-3">
-            <div class="flex flex-col items-center gap-0.5">
-              <svg width="14" height="14" fill="#6C63FF" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-              <div class="w-1 h-1 rounded-full bg-primary"></div>
-            </div>
-            <div class="flex flex-col items-center gap-0.5 opacity-40">
-              <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <div class="flex flex-col items-center gap-0.5 opacity-40">
-              <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            </div>
-            <div class="flex flex-col items-center gap-0.5 opacity-40">
-              <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
+							<!-- Bottom nav -->
+							<div
+								class="absolute bottom-0 left-0 right-0 bg-gray-900/80 backdrop-blur border-t border-white/5 flex justify-around py-2 px-3"
+							>
+								<div class="flex flex-col items-center gap-0.5">
+									<svg
+										width="14"
+										height="14"
+										fill="#6C63FF"
+										viewBox="0 0 24 24"
+									>
+										<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+									</svg>
+									<div class="w-1 h-1 rounded-full bg-primary"></div>
+								</div>
+								<div class="flex flex-col items-center gap-0.5 opacity-40">
+									<svg
+										width="14"
+										height="14"
+										fill="none"
+										stroke="white"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+									>
+										<rect x="3" y="4" width="18" height="18" rx="2" />
+										<line x1="16" y1="2" x2="16" y2="6" />
+										<line x1="8" y1="2" x2="8" y2="6" />
+										<line x1="3" y1="10" x2="21" y2="10" />
+									</svg>
+								</div>
+								<div class="flex flex-col items-center gap-0.5 opacity-40">
+									<svg
+										width="14"
+										height="14"
+										fill="none"
+										stroke="white"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+									>
+										<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+										<circle cx="9" cy="7" r="4" />
+									</svg>
+								</div>
+								<div class="flex flex-col items-center gap-0.5 opacity-40">
+									<svg
+										width="14"
+										height="14"
+										fill="none"
+										stroke="white"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+									>
+										<line x1="12" y1="1" x2="12" y2="23" />
+										<path
+											d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+										/>
+									</svg>
+								</div>
+							</div>
+						</div>
+					</div>
 
-      <!-- Second phone (behind, tilted) -->
-      <div class="absolute -right-4 md:right-16 top-8 hidden md:block opacity-70" style="transform: perspective(1000px) rotateY(-15deg) rotateX(5deg);">
-        <div style="width:220px;height:460px;background:#1a1a2e;border-radius:36px;border:7px solid #2d2d44;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-          <div style="padding:24px 12px 12px;background:#0f0f1e;height:100%;">
-            <p style="color:rgba(255,255,255,0.4);font-size:10px;margin-bottom:8px;">ФИНАНСЫ</p>
-            <div style="color:white;font-size:22px;font-weight:900;margin-bottom:4px;">47 200 ₽</div>
-            <p style="color:rgba(255,255,255,0.4);font-size:10px;margin-bottom:16px;">Всего за месяц</p>
-            <div style="display:flex;align-items:flex-end;gap:4px;height:80px;margin-bottom:12px;">
-              <div style="flex:1;background:rgba(108,99,255,0.3);border-radius:4px 4px 0 0;height:50%"></div>
-              <div style="flex:1;background:rgba(108,99,255,0.4);border-radius:4px 4px 0 0;height:70%"></div>
-              <div style="flex:1;background:rgba(108,99,255,0.6);border-radius:4px 4px 0 0;height:55%"></div>
-              <div style="flex:1;background:#6C63FF;border-radius:4px 4px 0 0;height:90%"></div>
-              <div style="flex:1;background:rgba(108,99,255,0.4);border-radius:4px 4px 0 0;height:65%"></div>
-              <div style="flex:1;background:rgba(108,99,255,0.3);border-radius:4px 4px 0 0;height:40%"></div>
-            </div>
-            <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:10px;">
-              <p style="color:rgba(255,255,255,0.4);font-size:9px;margin-bottom:8px;">ДОЛЖНИКИ</p>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ef4444);"></div>
-                  <div><p style="color:white;font-size:10px;font-weight:600;">Петров К.</p><p style="color:rgba(255,255,255,0.4);font-size:9px;">3 000 ₽</p></div>
-                </div>
-                <div style="background:#EF4444;color:white;font-size:8px;padding:2px 6px;border-radius:100px;">Должен</div>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#6C63FF);"></div>
-                  <div><p style="color:white;font-size:10px;font-weight:600;">Иванова М.</p><p style="color:rgba(255,255,255,0.4);font-size:9px;">1 500 ₽</p></div>
-                </div>
-                <div style="background:#EF4444;color:white;font-size:8px;padding:2px 6px;border-radius:100px;">Должна</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+					<!-- Second phone (behind, tilted) -->
+					<div
+						class="absolute -right-4 md:right-16 top-8 hidden md:block opacity-70"
+						style="transform: perspective(1000px) rotateY(-15deg) rotateX(5deg)"
+					>
+						<div
+							style="
+								width: 220px;
+								height: 460px;
+								background: #1a1a2e;
+								border-radius: 36px;
+								border: 7px solid #2d2d44;
+								overflow: hidden;
+								box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+							"
+						>
+							<div
+								style="
+									padding: 24px 12px 12px;
+									background: #0f0f1e;
+									height: 100%;
+								"
+							>
+								<p
+									style="
+										color: rgba(255, 255, 255, 0.4);
+										font-size: 10px;
+										margin-bottom: 8px;
+									"
+								>
+									ФИНАНСЫ
+								</p>
+								<div
+									style="
+										color: white;
+										font-size: 22px;
+										font-weight: 900;
+										margin-bottom: 4px;
+									"
+								>
+									47 200 ₽
+								</div>
+								<p
+									style="
+										color: rgba(255, 255, 255, 0.4);
+										font-size: 10px;
+										margin-bottom: 16px;
+									"
+								>
+									Всего за месяц
+								</p>
+								<div
+									style="
+										display: flex;
+										align-items: flex-end;
+										gap: 4px;
+										height: 80px;
+										margin-bottom: 12px;
+									"
+								>
+									<div
+										style="
+											flex: 1;
+											background: rgba(108, 99, 255, 0.3);
+											border-radius: 4px 4px 0 0;
+											height: 50%;
+										"
+									></div>
+									<div
+										style="
+											flex: 1;
+											background: rgba(108, 99, 255, 0.4);
+											border-radius: 4px 4px 0 0;
+											height: 70%;
+										"
+									></div>
+									<div
+										style="
+											flex: 1;
+											background: rgba(108, 99, 255, 0.6);
+											border-radius: 4px 4px 0 0;
+											height: 55%;
+										"
+									></div>
+									<div
+										style="
+											flex: 1;
+											background: #6c63ff;
+											border-radius: 4px 4px 0 0;
+											height: 90%;
+										"
+									></div>
+									<div
+										style="
+											flex: 1;
+											background: rgba(108, 99, 255, 0.4);
+											border-radius: 4px 4px 0 0;
+											height: 65%;
+										"
+									></div>
+									<div
+										style="
+											flex: 1;
+											background: rgba(108, 99, 255, 0.3);
+											border-radius: 4px 4px 0 0;
+											height: 40%;
+										"
+									></div>
+								</div>
+								<div
+									style="
+										background: rgba(255, 255, 255, 0.05);
+										border-radius: 12px;
+										padding: 10px;
+									"
+								>
+									<p
+										style="
+											color: rgba(255, 255, 255, 0.4);
+											font-size: 9px;
+											margin-bottom: 8px;
+										"
+									>
+										ДОЛЖНИКИ
+									</p>
+									<div
+										style="
+											display: flex;
+											align-items: center;
+											justify-content: space-between;
+											margin-bottom: 6px;
+										"
+									>
+										<div style="display: flex; align-items: center; gap: 6px">
+											<div
+												style="
+													width: 24px;
+													height: 24px;
+													border-radius: 50%;
+													background: linear-gradient(135deg, #f59e0b, #ef4444);
+												"
+											></div>
+											<div>
+												<p
+													style="
+														color: white;
+														font-size: 10px;
+														font-weight: 600;
+													"
+												>
+													Петров К.
+												</p>
+												<p
+													style="
+														color: rgba(255, 255, 255, 0.4);
+														font-size: 9px;
+													"
+												>
+													3 000 ₽
+												</p>
+											</div>
+										</div>
+										<div
+											style="
+												background: #ef4444;
+												color: white;
+												font-size: 8px;
+												padding: 2px 6px;
+												border-radius: 100px;
+											"
+										>
+											Должен
+										</div>
+									</div>
+									<div
+										style="
+											display: flex;
+											align-items: center;
+											justify-content: space-between;
+										"
+									>
+										<div style="display: flex; align-items: center; gap: 6px">
+											<div
+												style="
+													width: 24px;
+													height: 24px;
+													border-radius: 50%;
+													background: linear-gradient(135deg, #8b5cf6, #6c63ff);
+												"
+											></div>
+											<div>
+												<p
+													style="
+														color: white;
+														font-size: 10px;
+														font-weight: 600;
+													"
+												>
+													Иванова М.
+												</p>
+												<p
+													style="
+														color: rgba(255, 255, 255, 0.4);
+														font-size: 9px;
+													"
+												>
+													1 500 ₽
+												</p>
+											</div>
+										</div>
+										<div
+											style="
+												background: #ef4444;
+												color: white;
+												font-size: 8px;
+												padding: 2px 6px;
+												border-radius: 100px;
+											"
+										>
+											Должна
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-    <!-- Logos strip -->
-    <div class="mt-20 text-center">
-      <p class="text-sm text-gray-400 mb-6">Репетиторы используют вместо</p>
-      <div class="flex justify-center items-center gap-10 flex-wrap opacity-40 dark:opacity-30">
-        <span class="text-xl font-bold text-gray-500">Google Sheets</span>
-        <span class="text-xl font-bold text-gray-500">Notion</span>
-        <span class="text-xl font-bold text-gray-500">amoCRM</span>
-        <span class="text-xl font-bold text-gray-500">Yclients</span>
-        <span class="text-xl font-bold text-gray-500">Telegram-боты</span>
-      </div>
-    </div>
-  </div>
-</section>
+				<!-- Logos strip -->
+				<div class="mt-12 sm:mt-20 text-center">
+					<p data-i18n="logos_text" class="text-sm text-gray-400 mb-4 sm:mb-6">
+						Репетиторы используют вместо
+					</p>
+					<div
+						class="flex justify-center items-center gap-4 sm:gap-10 flex-wrap opacity-40 dark:opacity-30"
+					>
+						<span class="text-sm sm:text-xl font-bold text-gray-500"
+							>Google Sheets</span
+						>
+						<span class="text-sm sm:text-xl font-bold text-gray-500"
+							>Notion</span
+						>
+						<span class="text-sm sm:text-xl font-bold text-gray-500"
+							>amoCRM</span
+						>
+						<span class="text-sm sm:text-xl font-bold text-gray-500"
+							>Yclients</span
+						>
+						<span
+							data-i18n="logos_tg"
+							class="text-sm sm:text-xl font-bold text-gray-500"
+							>Telegram-боты</span
+						>
+					</div>
+				</div>
+			</div>
+		</section>
 
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      FEATURES
 ══════════════════════════════════════════════════════════════ -->
-<section id="features" class="py-24 bg-white dark:bg-gray-900">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center mb-16 fade-up">
-      <span class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4">Возможности</span>
-      <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">Всё что нужно репетитору</h2>
-      <p class="text-gray-500 dark:text-gray-400 text-lg max-w-xl mx-auto">
-        Забудьте о таблицах и хаосе в заметках — весь учёт в одном приложении
-      </p>
-    </div>
+		<section id="features" class="py-24 bg-white dark:bg-gray-900">
+			<div class="max-w-7xl mx-auto px-6">
+				<div class="text-center mb-16 fade-up">
+					<span
+						data-i18n="feat_badge"
+						class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4"
+						>Возможности</span
+					>
+					<h2
+						data-i18n="feat_title"
+						class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4"
+					>
+						Всё что нужно репетитору
+					</h2>
+					<p
+						data-i18n="feat_desc"
+						class="text-gray-500 dark:text-gray-400 text-lg max-w-xl mx-auto"
+					>
+						Забудьте о таблицах и хаосе в заметках — весь учёт в одном
+						приложении
+					</p>
+				</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<!-- Big card 1: Schedule -->
+					<div
+						class="feature-card md:col-span-2 bg-gradient-to-br from-primary/5 to-purple-50 dark:from-primary/10 dark:to-purple-900/20 rounded-3xl p-8 border border-primary/10 dark:border-primary/20"
+					>
+						<div class="flex flex-col md:flex-row gap-6 items-start">
+							<div class="flex-1">
+								<div
+									class="w-12 h-12 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center mb-4"
+								>
+									<svg
+										width="24"
+										height="24"
+										fill="none"
+										stroke="#6C63FF"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+									>
+										<rect x="3" y="4" width="18" height="18" rx="2" />
+										<line x1="16" y1="2" x2="16" y2="6" />
+										<line x1="8" y1="2" x2="8" y2="6" />
+										<line x1="3" y1="10" x2="21" y2="10" />
+									</svg>
+								</div>
+								<h3
+									data-i18n="feat_schedule_title"
+									class="text-2xl font-bold text-gray-900 dark:text-white mb-2"
+								>
+									Умное расписание
+								</h3>
+								<p
+									data-i18n="feat_schedule_desc"
+									class="text-gray-500 dark:text-gray-400 leading-relaxed"
+								>
+									Все уроки на одном экране. Вид по дням или по месяцу.
+									Добавляете урок за 10 секунд — ученик, предмет, время, цена.
+								</p>
+							</div>
+							<div
+								class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 w-full md:w-56 shrink-0"
+							>
+								<div class="flex justify-between items-center mb-3">
+									<span class="text-sm font-bold text-gray-800 dark:text-white"
+										>Март 2026</span
+									>
+									<div class="flex gap-1">
+										<div
+											class="w-5 h-5 rounded bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400 text-xs"
+										>
+											‹
+										</div>
+										<div
+											class="w-5 h-5 rounded bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400 text-xs"
+										>
+											›
+										</div>
+									</div>
+								</div>
+								<div class="grid grid-cols-7 gap-0.5 text-center">
+									<div class="text-[9px] text-gray-400 font-medium">Пн</div>
+									<div class="text-[9px] text-gray-400 font-medium">Вт</div>
+									<div class="text-[9px] text-gray-400 font-medium">Ср</div>
+									<div class="text-[9px] text-gray-400 font-medium">Чт</div>
+									<div class="text-[9px] text-gray-400 font-medium">Пт</div>
+									<div class="text-[9px] text-gray-400 font-medium">Сб</div>
+									<div class="text-[9px] text-gray-400 font-medium">Вс</div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										1
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										2
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										3
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										4
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										5
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										6
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										7
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										8
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										9
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										10
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										11
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										12
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										13
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										14
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										15
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										16
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										17
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										18
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										19
+									</div>
+									<div
+										class="text-[10px] py-1 rounded-full bg-primary text-white font-bold"
+									>
+										20
+									</div>
+									<div
+										class="relative text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										21
+										<div
+											class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+										></div>
+									</div>
+									<div
+										class="text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										22
+									</div>
+									<div
+										class="relative text-[10px] py-1 text-gray-600 dark:text-gray-400"
+									>
+										23
+										<div
+											class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-purple-400 rounded-full"
+										></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-      <!-- Big card 1: Schedule -->
-      <div class="feature-card md:col-span-2 bg-gradient-to-br from-primary/5 to-purple-50 dark:from-primary/10 dark:to-purple-900/20 rounded-3xl p-8 border border-primary/10 dark:border-primary/20">
-        <div class="flex flex-col md:flex-row gap-6 items-start">
-          <div class="flex-1">
-            <div class="w-12 h-12 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center mb-4">
-              <svg width="24" height="24" fill="none" stroke="#6C63FF" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Умное расписание</h3>
-            <p class="text-gray-500 dark:text-gray-400 leading-relaxed">Все уроки на одном экране. Вид по дням или по месяцу. Добавляете урок за 10 секунд — ученик, предмет, время, цена.</p>
-          </div>
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 w-full md:w-56 shrink-0">
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-sm font-bold text-gray-800 dark:text-white">Март 2026</span>
-              <div class="flex gap-1">
-                <div class="w-5 h-5 rounded bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400 text-xs">‹</div>
-                <div class="w-5 h-5 rounded bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400 text-xs">›</div>
-              </div>
-            </div>
-            <div class="grid grid-cols-7 gap-0.5 text-center">
-              <div class="text-[9px] text-gray-400 font-medium">Пн</div><div class="text-[9px] text-gray-400 font-medium">Вт</div><div class="text-[9px] text-gray-400 font-medium">Ср</div><div class="text-[9px] text-gray-400 font-medium">Чт</div><div class="text-[9px] text-gray-400 font-medium">Пт</div><div class="text-[9px] text-gray-400 font-medium">Сб</div><div class="text-[9px] text-gray-400 font-medium">Вс</div>
-              <div></div><div></div><div></div><div></div>
-              <div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">1</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">2</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">3</div>
-              <div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">4</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">5</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">6</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">7</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">8</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">9</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">10</div>
-              <div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">11</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">12</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">13</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">14</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">15</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">16</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">17</div>
-              <div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">18</div><div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">19</div><div class="text-[10px] py-1 rounded-full bg-primary text-white font-bold">20</div>
-              <div class="relative text-[10px] py-1 text-gray-600 dark:text-gray-400">21<div class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div></div>
-              <div class="text-[10px] py-1 text-gray-600 dark:text-gray-400">22</div>
-              <div class="relative text-[10px] py-1 text-gray-600 dark:text-gray-400">23<div class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-purple-400 rounded-full"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
+					<!-- Card: Payments -->
+					<div
+						class="feature-card bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/10 rounded-3xl p-6 border border-green-100 dark:border-green-800/30"
+					>
+						<div
+							class="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/40 flex items-center justify-center mb-4"
+						>
+							<svg
+								width="24"
+								height="24"
+								fill="none"
+								stroke="#10B981"
+								stroke-width="2"
+								viewBox="0 0 24 24"
+							>
+								<line x1="12" y1="1" x2="12" y2="23" />
+								<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+							</svg>
+						</div>
+						<h3
+							data-i18n="feat_payments_title"
+							class="text-xl font-bold text-gray-900 dark:text-white mb-2"
+						>
+							Учёт оплат
+						</h3>
+						<p
+							data-i18n="feat_payments_desc"
+							class="text-gray-500 dark:text-gray-400 text-sm mb-4"
+						>
+							Кто заплатил, кто должен — всегда на виду. Список должников в один
+							клик.
+						</p>
+						<div class="space-y-2">
+							<div
+								class="bg-white dark:bg-gray-800 rounded-xl p-2.5 flex items-center justify-between"
+							>
+								<div class="flex items-center gap-2">
+									<div
+										class="w-6 h-6 rounded-full bg-green-200 dark:bg-green-800 flex items-center justify-center text-[8px] font-bold text-green-700 dark:text-green-300"
+									>
+										АС
+									</div>
+									<span
+										class="text-xs font-medium text-gray-700 dark:text-gray-300"
+										>Аня Смирнова</span
+									>
+								</div>
+								<span class="text-xs font-bold text-green-600">✓ 1 500 ₽</span>
+							</div>
+							<div
+								class="bg-white dark:bg-gray-800 rounded-xl p-2.5 flex items-center justify-between"
+							>
+								<div class="flex items-center gap-2">
+									<div
+										class="w-6 h-6 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-[8px] font-bold text-red-600"
+									>
+										КП
+									</div>
+									<span
+										class="text-xs font-medium text-gray-700 dark:text-gray-300"
+										>Коля Петров</span
+									>
+								</div>
+								<span class="text-xs font-bold text-red-500">3 000 ₽</span>
+							</div>
+						</div>
+					</div>
 
-      <!-- Card: Payments -->
-      <div class="feature-card bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/10 rounded-3xl p-6 border border-green-100 dark:border-green-800/30">
-        <div class="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/40 flex items-center justify-center mb-4">
-          <svg width="24" height="24" fill="none" stroke="#10B981" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Учёт оплат</h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Кто заплатил, кто должен — всегда на виду. Список должников в один клик.</p>
-        <div class="space-y-2">
-          <div class="bg-white dark:bg-gray-800 rounded-xl p-2.5 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded-full bg-green-200 dark:bg-green-800 flex items-center justify-center text-[8px] font-bold text-green-700 dark:text-green-300">АС</div>
-              <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Аня Смирнова</span>
-            </div>
-            <span class="text-xs font-bold text-green-600">✓ 1 500 ₽</span>
-          </div>
-          <div class="bg-white dark:bg-gray-800 rounded-xl p-2.5 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-[8px] font-bold text-red-600">КП</div>
-              <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Коля Петров</span>
-            </div>
-            <span class="text-xs font-bold text-red-500">3 000 ₽</span>
-          </div>
-        </div>
-      </div>
+					<!-- Card: Telegram -->
+					<div
+						class="feature-card bg-gradient-to-br from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/10 rounded-3xl p-6 border border-blue-100 dark:border-blue-800/30"
+					>
+						<div
+							class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"
+						>
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="#3B82F6">
+								<path
+									d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+								/>
+							</svg>
+						</div>
+						<h3
+							data-i18n="feat_telegram_title"
+							class="text-xl font-bold text-gray-900 dark:text-white mb-2"
+						>
+							Telegram-напоминания
+						</h3>
+						<p
+							data-i18n="feat_telegram_desc"
+							class="text-gray-500 dark:text-gray-400 text-sm mb-4"
+						>
+							Автоматические уведомления ученикам за час до урока и напоминания
+							об оплате.
+						</p>
+						<div
+							class="bg-white dark:bg-gray-800 rounded-xl p-3 text-xs space-y-2"
+						>
+							<div class="flex items-start gap-2">
+								<div
+									class="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"
+								>
+									<svg width="10" height="10" viewBox="0 0 24 24" fill="white">
+										<path
+											d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+										/>
+									</svg>
+								</div>
+								<div
+									class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-2 flex-1"
+								>
+									<p class="text-gray-600 dark:text-gray-300">
+										Аня, напоминаю: урок математики
+										<span class="font-semibold">сегодня в 14:00</span>. Жду вас!
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
 
-      <!-- Card: Telegram -->
-      <div class="feature-card bg-gradient-to-br from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/10 rounded-3xl p-6 border border-blue-100 dark:border-blue-800/30">
-        <div class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="#3B82F6"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Telegram-напоминания</h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Автоматические уведомления ученикам за час до урока и напоминания об оплате.</p>
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-3 text-xs space-y-2">
-          <div class="flex items-start gap-2">
-            <div class="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-            </div>
-            <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-2 flex-1">
-              <p class="text-gray-600 dark:text-gray-300">Аня, напоминаю: урок математики <span class="font-semibold">сегодня в 14:00</span>. Жду вас!</p>
-            </div>
-          </div>
-        </div>
-      </div>
+					<!-- Big card 2: Students -->
+					<div
+						class="feature-card md:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-3xl p-8 border border-amber-100 dark:border-amber-800/30"
+					>
+						<div class="flex flex-col md:flex-row gap-6 items-start">
+							<div class="flex-1">
+								<div
+									class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mb-4"
+								>
+									<svg
+										width="24"
+										height="24"
+										fill="none"
+										stroke="#F59E0B"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+									>
+										<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+										<circle cx="9" cy="7" r="4" />
+										<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+										<path d="M16 3.13a4 4 0 0 1 0 7.75" />
+									</svg>
+								</div>
+								<h3
+									data-i18n="feat_students_title"
+									class="text-2xl font-bold text-gray-900 dark:text-white mb-2"
+								>
+									База учеников
+								</h3>
+								<p
+									data-i18n="feat_students_desc"
+									class="text-gray-500 dark:text-gray-400 leading-relaxed"
+								>
+									Карточка каждого ученика с историей уроков, заметками, ДЗ и
+									статусом оплат. Пригласите ученика по ссылке — он видит
+									расписание и задания.
+								</p>
+							</div>
+							<div class="space-y-3 w-full md:w-64 shrink-0">
+								<div
+									class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3"
+								>
+									<div
+										class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-blue-500 flex items-center justify-center text-white text-sm font-bold"
+									>
+										АС
+									</div>
+									<div class="flex-1 min-w-0">
+										<p
+											class="text-sm font-semibold text-gray-900 dark:text-white truncate"
+										>
+											Аня Смирнова
+										</p>
+										<p class="text-xs text-gray-400">Математика · ЕГЭ</p>
+									</div>
+									<div
+										class="text-[10px] bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium shrink-0"
+									>
+										Активна
+									</div>
+								</div>
+								<div
+									class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3"
+								>
+									<div
+										class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-red-400 flex items-center justify-center text-white text-sm font-bold"
+									>
+										КП
+									</div>
+									<div class="flex-1 min-w-0">
+										<p
+											class="text-sm font-semibold text-gray-900 dark:text-white truncate"
+										>
+											Коля Петров
+										</p>
+										<p class="text-xs text-gray-400">Физика · 9 класс</p>
+									</div>
+									<div
+										class="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-medium shrink-0"
+									>
+										Должен
+									</div>
+								</div>
+								<div
+									class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3"
+								>
+									<div
+										class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-teal-400 flex items-center justify-center text-white text-sm font-bold"
+									>
+										МИ
+									</div>
+									<div class="flex-1 min-w-0">
+										<p
+											class="text-sm font-semibold text-gray-900 dark:text-white truncate"
+										>
+											Маша Иванова
+										</p>
+										<p class="text-xs text-gray-400">Русский · ОГЭ</p>
+									</div>
+									<div
+										class="text-[10px] bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium shrink-0"
+									>
+										Активна
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-      <!-- Big card 2: Students -->
-      <div class="feature-card md:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-3xl p-8 border border-amber-100 dark:border-amber-800/30">
-        <div class="flex flex-col md:flex-row gap-6 items-start">
-          <div class="flex-1">
-            <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mb-4">
-              <svg width="24" height="24" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">База учеников</h3>
-            <p class="text-gray-500 dark:text-gray-400 leading-relaxed">Карточка каждого ученика с историей уроков, заметками, ДЗ и статусом оплат. Пригласите ученика по ссылке — он видит расписание и задания.</p>
-          </div>
-          <div class="space-y-3 w-full md:w-64 shrink-0">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-blue-500 flex items-center justify-center text-white text-sm font-bold">АС</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">Аня Смирнова</p>
-                <p class="text-xs text-gray-400">Математика · ЕГЭ</p>
-              </div>
-              <div class="text-[10px] bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium shrink-0">Активна</div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-red-400 flex items-center justify-center text-white text-sm font-bold">КП</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">Коля Петров</p>
-                <p class="text-xs text-gray-400">Физика · 9 класс</p>
-              </div>
-              <div class="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-medium shrink-0">Должен</div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-teal-400 flex items-center justify-center text-white text-sm font-bold">МИ</div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">Маша Иванова</p>
-                <p class="text-xs text-gray-400">Русский · ОГЭ</p>
-              </div>
-              <div class="text-[10px] bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium shrink-0">Активна</div>
-            </div>
-          </div>
-        </div>
-      </div>
+					<!-- Card: Homework -->
+					<div
+						class="feature-card bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/10 rounded-3xl p-6 border border-purple-100 dark:border-purple-800/30"
+					>
+						<div
+							class="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4"
+						>
+							<svg
+								width="24"
+								height="24"
+								fill="none"
+								stroke="#8B5CF6"
+								stroke-width="2"
+								viewBox="0 0 24 24"
+							>
+								<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+								<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+							</svg>
+						</div>
+						<h3
+							data-i18n="feat_homework_title"
+							class="text-xl font-bold text-gray-900 dark:text-white mb-2"
+						>
+							Домашние задания
+						</h3>
+						<p
+							data-i18n="feat_homework_desc"
+							class="text-gray-500 dark:text-gray-400 text-sm"
+						>
+							Задавайте ДЗ к уроку. Ученик сдаёт через приложение. Вы видите
+							статус: задано, сдано, проверено.
+						</p>
+					</div>
 
-      <!-- Card: Homework -->
-      <div class="feature-card bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/10 rounded-3xl p-6 border border-purple-100 dark:border-purple-800/30">
-        <div class="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4">
-          <svg width="24" height="24" fill="none" stroke="#8B5CF6" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Домашние задания</h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">Задавайте ДЗ к уроку. Ученик сдаёт через приложение. Вы видите статус: задано, сдано, проверено.</p>
-      </div>
+					<!-- Card: Analytics -->
+					<div
+						class="feature-card bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/10 rounded-3xl p-6 border border-rose-100 dark:border-rose-800/30"
+					>
+						<div
+							class="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center mb-4"
+						>
+							<svg
+								width="24"
+								height="24"
+								fill="none"
+								stroke="#F43F5E"
+								stroke-width="2"
+								viewBox="0 0 24 24"
+							>
+								<line x1="18" y1="20" x2="18" y2="10" />
+								<line x1="12" y1="20" x2="12" y2="4" />
+								<line x1="6" y1="20" x2="6" y2="14" />
+							</svg>
+						</div>
+						<h3
+							data-i18n="feat_analytics_title"
+							class="text-xl font-bold text-gray-900 dark:text-white mb-2"
+						>
+							Финансовая аналитика
+						</h3>
+						<p
+							data-i18n="feat_analytics_desc"
+							class="text-gray-500 dark:text-gray-400 text-sm"
+						>
+							Сколько заработали за месяц, кто должен, динамика дохода —
+							наглядно и понятно.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
 
-      <!-- Card: Analytics -->
-      <div class="feature-card bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/10 rounded-3xl p-6 border border-rose-100 dark:border-rose-800/30">
-        <div class="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center mb-4">
-          <svg width="24" height="24" fill="none" stroke="#F43F5E" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Финансовая аналитика</h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">Сколько заработали за месяц, кто должен, динамика дохода — наглядно и понятно.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      STATS
 ══════════════════════════════════════════════════════════════ -->
-<section class="py-24 bg-gray-50 dark:bg-gray-800/50">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center mb-12 fade-up">
-      <span class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4">Результаты</span>
-      <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
-        Экономит время<br/>и приносит спокойствие
-      </h2>
-      <p class="text-gray-500 dark:text-gray-400 text-lg max-w-lg mx-auto">
-        Репетиторы, которые перешли с таблиц, говорят что экономят 3–5 часов в неделю
-      </p>
-    </div>
+		<section class="py-24 bg-gray-50 dark:bg-gray-800/50">
+			<div class="max-w-7xl mx-auto px-6">
+				<div class="text-center mb-12 fade-up">
+					<span
+						data-i18n="stats_badge"
+						class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4"
+						>Результаты</span
+					>
+					<h2
+						class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4"
+					>
+						<span data-i18n="stats_title_1">Экономит время</span><br /><span
+							data-i18n="stats_title_2"
+							>и приносит спокойствие</span
+						>
+					</h2>
+					<p
+						data-i18n="stats_desc"
+						class="text-gray-500 dark:text-gray-400 text-lg max-w-lg mx-auto"
+					>
+						Репетиторы, которые перешли с таблиц, говорят что экономят 3–5 часов
+						в неделю
+					</p>
+				</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-up">
-      <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm">
-        <div class="text-5xl font-black text-primary mb-2">3–5ч</div>
-        <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">ЭКОНОМИЯ В НЕДЕЛЮ</div>
-        <p class="text-sm text-gray-500 dark:text-gray-400">Меньше времени на учёт — больше на уроки</p>
-      </div>
-      <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm">
-        <div class="text-5xl font-black text-primary mb-2">12+</div>
-        <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">УЧЕНИКОВ ПОД УПРАВЛЕНИЕМ</div>
-        <p class="text-sm text-gray-500 dark:text-gray-400">Без стресса. Всё структурировано и под рукой</p>
-      </div>
-      <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm">
-        <div class="text-5xl font-black text-primary mb-2">0 ₽</div>
-        <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">ДО 5 УЧЕНИКОВ</div>
-        <p class="text-sm text-gray-500 dark:text-gray-400">Попробуйте бесплатно — без лимита по времени</p>
-      </div>
-    </div>
-  </div>
-</section>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-up">
+					<div
+						class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm"
+					>
+						<div class="text-4xl sm:text-5xl font-black text-primary mb-2">
+							3–5ч
+						</div>
+						<div
+							data-i18n="stats_saving_label"
+							class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-gray-400 mb-2"
+						>
+							ЭКОНОМИЯ В НЕДЕЛЮ
+						</div>
+						<p
+							data-i18n="stats_saving_desc"
+							class="text-sm text-gray-500 dark:text-gray-400"
+						>
+							Меньше времени на учёт — больше на уроки
+						</p>
+					</div>
+					<div
+						class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm"
+					>
+						<div class="text-4xl sm:text-5xl font-black text-primary mb-2">
+							12+
+						</div>
+						<div
+							data-i18n="stats_students_label"
+							class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-gray-400 mb-2"
+						>
+							УЧЕНИКОВ ПОД УПРАВЛЕНИЕМ
+						</div>
+						<p
+							data-i18n="stats_students_desc"
+							class="text-sm text-gray-500 dark:text-gray-400"
+						>
+							Без стресса. Всё структурировано и под рукой
+						</p>
+					</div>
+					<div
+						class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm"
+					>
+						<div class="text-4xl sm:text-5xl font-black text-primary mb-2">
+							0 ₽
+						</div>
+						<div
+							data-i18n="stats_free_label"
+							class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-gray-400 mb-2"
+						>
+							ДО 5 УЧЕНИКОВ
+						</div>
+						<p
+							data-i18n="stats_free_desc"
+							class="text-sm text-gray-500 dark:text-gray-400"
+						>
+							Попробуйте бесплатно — без лимита по времени
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
 
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      COMPARISON TABLE
 ══════════════════════════════════════════════════════════════ -->
-<section id="compare" class="py-24 bg-white dark:bg-gray-900">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center mb-12 fade-up">
-      <span class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4">Сравнение</span>
-      <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">Lessonify заменяет всё остальное</h2>
-      <p class="text-gray-500 dark:text-gray-400 text-lg max-w-xl mx-auto">Один инструмент вместо таблицы, CRM и ботов</p>
-    </div>
+		<section id="compare" class="py-24 bg-white dark:bg-gray-900">
+			<div class="max-w-5xl mx-auto px-6">
+				<div class="text-center mb-12 fade-up">
+					<span
+						data-i18n="compare_badge"
+						class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4"
+						>Сравнение</span
+					>
+					<h2
+						data-i18n="compare_title"
+						class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4"
+					>
+						Lessonify заменяет всё остальное
+					</h2>
+					<p
+						data-i18n="compare_desc"
+						class="text-gray-500 dark:text-gray-400 text-lg max-w-xl mx-auto"
+					>
+						Один инструмент вместо таблицы, CRM и ботов
+					</p>
+				</div>
 
-    <div class="fade-up">
-      <!-- Tab switcher -->
-      <div class="flex justify-center mb-6">
-        <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-full p-1 gap-1">
-          <button id="tab-lessonify" onclick="switchCompareTab('lessonify')"
-            class="compare-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-primary text-white shadow-sm">
-            ✦ Lessonify
-          </button>
-          <button id="tab-others" onclick="switchCompareTab('others')"
-            class="compare-tab px-6 py-2.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400">
-            Другие сервисы
-          </button>
-        </div>
-      </div>
+				<div class="fade-up">
+					<!-- Tab switcher -->
+					<div class="flex justify-center mb-6">
+						<div
+							class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-full p-1 gap-1"
+						>
+							<button
+								id="tab-lessonify"
+								onclick="switchCompareTab('lessonify')"
+								class="compare-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-primary text-white shadow-sm"
+							>
+								✦ Lessonify
+							</button>
+							<button
+								id="tab-others"
+								onclick="switchCompareTab('others')"
+								data-i18n="compare_others"
+								class="compare-tab px-6 py-2.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400"
+							>
+								Другие сервисы
+							</button>
+						</div>
+					</div>
 
-      <!-- Table -->
-      <div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
-        <!-- Category header -->
-        <div class="bg-gray-50 dark:bg-gray-800 px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 text-sm border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
-          <svg width="14" height="14" fill="none" stroke="#6C63FF" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          Основные функции
-        </div>
-        <div id="compare-rows"></div>
+					<!-- Table -->
+					<div
+						class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-x-auto"
+					>
+						<!-- Category header -->
+						<div
+							class="bg-gray-50 dark:bg-gray-800 px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 text-sm border-b border-gray-200 dark:border-gray-700 flex items-center gap-2"
+						>
+							<svg
+								width="14"
+								height="14"
+								fill="none"
+								stroke="#6C63FF"
+								stroke-width="2"
+								viewBox="0 0 24 24"
+							>
+								<polyline points="9 11 12 14 22 4" />
+								<path
+									d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+								/>
+							</svg>
+							<span data-i18n="compare_features">Основные функции</span>
+						</div>
+						<div id="compare-rows"></div>
 
-        <div class="bg-gray-50 dark:bg-gray-800 px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 text-sm border-t border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
-          <svg width="14" height="14" fill="none" stroke="#6C63FF" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          Интеграции
-        </div>
-        <div id="compare-rows-2"></div>
-      </div>
-    </div>
-  </div>
-</section>
+						<div
+							class="bg-gray-50 dark:bg-gray-800 px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 text-sm border-t border-b border-gray-200 dark:border-gray-700 flex items-center gap-2"
+						>
+							<svg
+								width="14"
+								height="14"
+								fill="none"
+								stroke="#6C63FF"
+								stroke-width="2"
+								viewBox="0 0 24 24"
+							>
+								<circle cx="12" cy="12" r="10" />
+								<path d="M12 8v4l3 3" />
+							</svg>
+							<span data-i18n="compare_integrations">Интеграции</span>
+						</div>
+						<div id="compare-rows-2"></div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      TESTIMONIALS
 ══════════════════════════════════════════════════════════════ -->
-<section class="py-24 bg-[#faf8ff] dark:bg-gray-800/30">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center mb-12 fade-up">
-      <span class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4">Отзывы</span>
-      <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">Что говорят репетиторы</h2>
-    </div>
+		<section class="py-24 bg-[#faf8ff] dark:bg-gray-800/30">
+			<div class="max-w-7xl mx-auto px-6">
+				<div class="text-center mb-12 fade-up">
+					<span
+						data-i18n="test_badge"
+						class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4"
+						>Отзывы</span
+					>
+					<h2
+						data-i18n="test_title"
+						class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4"
+					>
+						Что говорят репетиторы
+					</h2>
+				</div>
 
-    <div class="relative overflow-hidden">
-      <div class="testimonial-track" id="testimonialTrack">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]">
-          <div class="flex gap-1 mb-4"><span class="text-amber-400 text-lg">★★★★★</span></div>
-          <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">"Наконец-то не путаюсь кто заплатил. Вся история по каждому ученику — за 2 секунды. Рекомендую всем коллегам."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-primary flex items-center justify-center text-white font-bold">ЕК</div>
-            <div>
-              <p class="font-semibold text-gray-900 dark:text-white">Екатерина К.</p>
-              <p class="text-sm text-gray-400">Репетитор математики, Москва</p>
-            </div>
-          </div>
-        </div>
+				<div class="relative overflow-hidden">
+					<div class="testimonial-track" id="testimonialTrack">
+						<div
+							class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]"
+						>
+							<div class="flex gap-1 mb-4">
+								<span class="text-amber-400 text-lg">★★★★★</span>
+							</div>
+							<p
+								data-i18n="test_1_text"
+								class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6"
+							>
+								"Наконец-то не путаюсь кто заплатил. Вся история по каждому
+								ученику — за 2 секунды. Рекомендую всем коллегам."
+							</p>
+							<div class="flex items-center gap-3">
+								<div
+									class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-primary flex items-center justify-center text-white font-bold"
+								>
+									ЕК
+								</div>
+								<div>
+									<p class="font-semibold text-gray-900 dark:text-white">
+										Екатерина К.
+									</p>
+									<p data-i18n="test_1_role" class="text-sm text-gray-400">
+										Репетитор математики, Москва
+									</p>
+								</div>
+							</div>
+						</div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]">
-          <div class="flex gap-1 mb-4"><span class="text-amber-400 text-lg">★★★★★</span></div>
-          <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">"Ученики стали реже пропускать уроки — Telegram-напоминания работают лучше чем мои вручную. Экономлю час в день точно."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white font-bold">АВ</div>
-            <div>
-              <p class="font-semibold text-gray-900 dark:text-white">Александр В.</p>
-              <p class="text-sm text-gray-400">Репетитор английского, СПб</p>
-            </div>
-          </div>
-        </div>
+						<div
+							class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]"
+						>
+							<div class="flex gap-1 mb-4">
+								<span class="text-amber-400 text-lg">★★★★★</span>
+							</div>
+							<p
+								data-i18n="test_2_text"
+								class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6"
+							>
+								"Ученики стали реже пропускать уроки — Telegram-напоминания
+								работают лучше чем мои вручную. Экономлю час в день точно."
+							</p>
+							<div class="flex items-center gap-3">
+								<div
+									class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white font-bold"
+								>
+									АВ
+								</div>
+								<div>
+									<p class="font-semibold text-gray-900 dark:text-white">
+										Александр В.
+									</p>
+									<p data-i18n="test_2_role" class="text-sm text-gray-400">
+										Репетитор английского, СПб
+									</p>
+								</div>
+							</div>
+						</div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]">
-          <div class="flex gap-1 mb-4"><span class="text-amber-400 text-lg">★★★★★</span></div>
-          <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">"Работаю с 18 учениками и раньше вела три таблицы. Теперь всё в одном месте. Узнаю сколько заработала за пару секунд."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white font-bold">НС</div>
-            <div>
-              <p class="font-semibold text-gray-900 dark:text-white">Наталья С.</p>
-              <p class="text-sm text-gray-400">Репетитор русского, Казань</p>
-            </div>
-          </div>
-        </div>
+						<div
+							class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]"
+						>
+							<div class="flex gap-1 mb-4">
+								<span class="text-amber-400 text-lg">★★★★★</span>
+							</div>
+							<p
+								data-i18n="test_3_text"
+								class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6"
+							>
+								"Работаю с 18 учениками и раньше вела три таблицы. Теперь всё в
+								одном месте. Узнаю сколько заработала за пару секунд."
+							</p>
+							<div class="flex items-center gap-3">
+								<div
+									class="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white font-bold"
+								>
+									НС
+								</div>
+								<div>
+									<p class="font-semibold text-gray-900 dark:text-white">
+										Наталья С.
+									</p>
+									<p data-i18n="test_3_role" class="text-sm text-gray-400">
+										Репетитор русского, Казань
+									</p>
+								</div>
+							</div>
+						</div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]">
-          <div class="flex gap-1 mb-4"><span class="text-amber-400 text-lg">★★★★★</span></div>
-          <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">"Ученик видит расписание и ДЗ сам. Родители перестали писать 'а когда урок?' — всё в приложении. Очень удобно."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold">МП</div>
-            <div>
-              <p class="font-semibold text-gray-900 dark:text-white">Михаил П.</p>
-              <p class="text-sm text-gray-400">Репетитор физики, Новосибирск</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+						<div
+							class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]"
+						>
+							<div class="flex gap-1 mb-4">
+								<span class="text-amber-400 text-lg">★★★★★</span>
+							</div>
+							<p
+								data-i18n="test_4_text"
+								class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6"
+							>
+								"Ученик видит расписание и ДЗ сам. Родители перестали писать 'а
+								когда урок?' — всё в приложении. Очень удобно."
+							</p>
+							<div class="flex items-center gap-3">
+								<div
+									class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold"
+								>
+									МП
+								</div>
+								<div>
+									<p class="font-semibold text-gray-900 dark:text-white">
+										Михаил П.
+									</p>
+									<p data-i18n="test_4_role" class="text-sm text-gray-400">
+										Репетитор физики, Новосибирск
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-    <div class="flex justify-center gap-3 mt-8">
-      <button onclick="prevTestimonial()" class="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-primary hover:text-primary transition-colors">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button onclick="nextTestimonial()" class="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-primary hover:text-primary transition-colors">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </div>
-  </div>
-</section>
+				<div class="flex justify-center gap-3 mt-8">
+					<button
+						onclick="prevTestimonial()"
+						class="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-primary hover:text-primary transition-colors"
+					>
+						<svg
+							width="18"
+							height="18"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							viewBox="0 0 24 24"
+						>
+							<polyline points="15 18 9 12 15 6" />
+						</svg>
+					</button>
+					<button
+						onclick="nextTestimonial()"
+						class="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-primary hover:text-primary transition-colors"
+					>
+						<svg
+							width="18"
+							height="18"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							viewBox="0 0 24 24"
+						>
+							<polyline points="9 18 15 12 9 6" />
+						</svg>
+					</button>
+				</div>
+			</div>
+		</section>
 
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      PRICING
 ══════════════════════════════════════════════════════════════ -->
-<section id="pricing" class="py-24 bg-white dark:bg-gray-900">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center mb-12 fade-up">
-      <span class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4">Тарифы</span>
-      <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">Простые и честные цены</h2>
-      <p class="text-gray-500 dark:text-gray-400 text-lg max-w-lg mx-auto">Начните бесплатно. Переходите на Pro когда будете готовы.</p>
-    </div>
+		<section id="pricing" class="py-24 bg-white dark:bg-gray-900">
+			<div class="max-w-5xl mx-auto px-6">
+				<div class="text-center mb-12 fade-up">
+					<span
+						data-i18n="price_badge"
+						class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4"
+						>Тарифы</span
+					>
+					<h2
+						data-i18n="price_title"
+						class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4"
+					>
+						Простые и честные цены
+					</h2>
+					<p
+						data-i18n="price_desc"
+						class="text-gray-500 dark:text-gray-400 text-lg max-w-lg mx-auto"
+					>
+						Начните бесплатно. Переходите на Pro когда будете готовы.
+					</p>
+				</div>
 
-    <!-- Toggle -->
-    <div class="flex justify-center mb-12">
-      <div class="bg-gray-100 dark:bg-gray-800 rounded-full p-1 flex items-center gap-1">
-        <button id="monthly-btn" onclick="setPricing('monthly')" class="px-6 py-2 rounded-full text-sm font-semibold transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm">
-          Ежемесячно
-        </button>
-        <button id="annual-btn" onclick="setPricing('annual')" class="px-6 py-2 rounded-full text-sm font-semibold transition-all text-gray-500 dark:text-gray-400">
-          Ежегодно <span class="text-green-600 font-bold">−33%</span>
-        </button>
-      </div>
-    </div>
+				<!-- Toggle -->
+				<div class="flex justify-center mb-12">
+					<div
+						class="bg-gray-100 dark:bg-gray-800 rounded-full p-1 flex items-center gap-1"
+					>
+						<button
+							id="monthly-btn"
+							onclick="setPricing('monthly')"
+							data-i18n="price_monthly"
+							class="px-6 py-2 rounded-full text-sm font-semibold transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+						>
+							Ежемесячно
+						</button>
+						<button
+							id="annual-btn"
+							onclick="setPricing('annual')"
+							class="px-6 py-2 rounded-full text-sm font-semibold transition-all text-gray-500 dark:text-gray-400"
+						>
+							<span data-i18n="price_annual">Ежегодно</span>
+							<span class="text-green-600 font-bold">−33%</span>
+						</button>
+					</div>
+				</div>
 
-    <!-- Plans — equal height grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto fade-up items-stretch">
+				<!-- Plans — equal height grid -->
+				<div
+					class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto fade-up items-stretch"
+				>
+					<!-- Free -->
+					<div
+						class="border-2 border-gray-100 dark:border-gray-700 rounded-3xl p-8 flex flex-col"
+					>
+						<div>
+							<h3
+								data-i18n="price_free_name"
+								class="text-2xl font-bold text-gray-900 dark:text-white mb-1"
+							>
+								Бесплатно
+							</h3>
+							<p data-i18n="price_free_desc" class="text-gray-400 text-sm mb-6">
+								Для старта и знакомства с приложением
+							</p>
+							<div class="flex items-end gap-1 mb-8">
+								<span class="text-5xl font-black text-gray-900 dark:text-white"
+									>0 ₽</span
+								>
+								<span
+									data-i18n="price_free_forever"
+									class="text-gray-400 mb-2 text-sm"
+									>/навсегда</span
+								>
+							</div>
+							<a
+								href="https://app.lessonify.ru"
+								data-i18n="price_free_btn"
+								class="block text-center py-3 rounded-2xl border-2 border-gray-200 dark:border-gray-600 font-semibold text-gray-700 dark:text-gray-300 hover:border-primary hover:text-primary transition-colors mb-8"
+							>
+								Начать бесплатно
+							</a>
+						</div>
+						<ul class="space-y-3">
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="#6C63FF"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_free_f1">До 5 учеников</span>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="#6C63FF"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_free_f2">Базовое расписание</span>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="#6C63FF"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_free_f3">Учёт оплат</span>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="#6C63FF"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_free_f4">Telegram-напоминания</span>
+							</li>
+						</ul>
+					</div>
 
-      <!-- Free -->
-      <div class="border-2 border-gray-100 dark:border-gray-700 rounded-3xl p-8 flex flex-col">
-        <div>
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Бесплатно</h3>
-          <p class="text-gray-400 text-sm mb-6">Для старта и знакомства с приложением</p>
-          <div class="flex items-end gap-1 mb-8">
-            <span class="text-5xl font-black text-gray-900 dark:text-white">0 ₽</span>
-            <span class="text-gray-400 mb-2 text-sm">/навсегда</span>
-          </div>
-          <a href="https://app.lessonify.ru" class="block text-center py-3 rounded-2xl border-2 border-gray-200 dark:border-gray-600 font-semibold text-gray-700 dark:text-gray-300 hover:border-primary hover:text-primary transition-colors mb-8">
-            Начать бесплатно
-          </a>
-        </div>
-        <ul class="space-y-3">
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="#6C63FF" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            До 5 учеников
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="#6C63FF" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Базовое расписание
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="#6C63FF" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Учёт оплат
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="#6C63FF" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Telegram-напоминания
-          </li>
-        </ul>
-      </div>
+					<!-- Pro -->
+					<div
+						class="border-2 border-primary rounded-3xl p-8 relative bg-gradient-to-br from-primary/5 to-purple-50/50 dark:from-primary/10 dark:to-purple-900/20 flex flex-col"
+					>
+						<div
+							class="plan-badge bg-gradient-to-r from-amber-400 to-orange-400 text-white text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1 w-max whitespace-nowrap"
+						>
+							<svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+								<path
+									d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+								/>
+							</svg>
+							<span data-i18n="price_popular">Популярный выбор</span>
+						</div>
+						<div>
+							<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+								Pro
+							</h3>
+							<p data-i18n="price_pro_desc" class="text-gray-400 text-sm mb-6">
+								Для серьёзной работы с учениками
+							</p>
+							<div class="flex items-end gap-1 mb-2">
+								<span
+									id="price-display"
+									class="text-5xl font-black text-primary"
+									>499 ₽</span
+								>
+								<span
+									id="period-display"
+									data-i18n="price_per_month"
+									class="text-gray-400 mb-2 text-sm"
+									>/месяц</span
+								>
+							</div>
+							<p
+								id="annual-note"
+								data-i18n="price_annual_note"
+								class="text-sm text-green-600 font-medium mb-6 hidden"
+							>
+								3 990 ₽ в год — 2 месяца бесплатно
+							</p>
+							<a
+								href="https://app.lessonify.ru"
+								data-i18n="price_pro_btn"
+								class="block text-center py-3 rounded-2xl bg-primary text-white font-semibold hover:bg-primary-dark transition-colors mb-8"
+							>
+								Подключить Pro
+							</a>
+						</div>
+						<ul class="space-y-3">
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="white"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_pro_f1"
+									>Неограниченное кол-во учеников</span
+								>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="white"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_pro_f2">Инвойсы PDF</span>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="white"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_pro_f3"
+									>Синхронизация с Google Calendar</span
+								>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="white"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_pro_f4">Онлайн-запись для учеников</span>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="white"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_pro_f5">Финансовая аналитика</span>
+							</li>
+							<li
+								class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
+							>
+								<div
+									class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"
+								>
+									<svg
+										width="10"
+										height="10"
+										fill="none"
+										stroke="white"
+										stroke-width="2.5"
+										viewBox="0 0 24 24"
+									>
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+								</div>
+								<span data-i18n="price_pro_f6">Журнал уроков с заметками</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
 
-      <!-- Pro -->
-      <div class="border-2 border-primary rounded-3xl p-8 relative bg-gradient-to-br from-primary/5 to-purple-50/50 dark:from-primary/10 dark:to-purple-900/20 flex flex-col">
-        <div class="plan-badge bg-gradient-to-r from-amber-400 to-orange-400 text-white text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1 w-max whitespace-nowrap">
-          <svg width="12" height="12" fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Популярный выбор
-        </div>
-        <div>
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Pro</h3>
-          <p class="text-gray-400 text-sm mb-6">Для серьёзной работы с учениками</p>
-          <div class="flex items-end gap-1 mb-2">
-            <span id="price-display" class="text-5xl font-black text-primary">499 ₽</span>
-            <span id="period-display" class="text-gray-400 mb-2 text-sm">/месяц</span>
-          </div>
-          <p id="annual-note" class="text-sm text-green-600 font-medium mb-6 hidden">3 990 ₽ в год — 2 месяца бесплатно</p>
-          <a href="https://app.lessonify.ru" class="block text-center py-3 rounded-2xl bg-primary text-white font-semibold hover:bg-primary-dark transition-colors mb-8">
-            Подключить Pro
-          </a>
-        </div>
-        <ul class="space-y-3">
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Неограниченное кол-во учеников
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Инвойсы PDF
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Синхронизация с Google Calendar
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Онлайн-запись для учеников
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Финансовая аналитика
-          </li>
-          <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-            <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-            Журнал уроков с заметками
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      FAQ
 ══════════════════════════════════════════════════════════════ -->
-<section id="faq" class="py-24 bg-gray-50 dark:bg-gray-800/50">
-  <div class="max-w-3xl mx-auto px-6">
-    <div class="text-center mb-12 fade-up">
-      <span class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4">FAQ</span>
-      <h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">Частые вопросы</h2>
-    </div>
+		<section id="faq" class="py-24 bg-gray-50 dark:bg-gray-800/50">
+			<div class="max-w-3xl mx-auto px-6">
+				<div class="text-center mb-12 fade-up">
+					<span
+						class="inline-block text-primary text-sm font-semibold bg-primary/8 dark:bg-primary/15 px-4 py-1.5 rounded-full mb-4"
+						>FAQ</span
+					>
+					<h2
+						data-i18n="faq_title"
+						class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4"
+					>
+						Частые вопросы
+					</h2>
+				</div>
 
-    <div class="space-y-3 fade-up" id="faq-list"></div>
-  </div>
-</section>
+				<div class="space-y-3 fade-up" id="faq-list"></div>
+			</div>
+		</section>
 
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      CTA BANNER
 ══════════════════════════════════════════════════════════════ -->
-<section class="py-24 bg-white dark:bg-gray-900">
-  <div class="max-w-4xl mx-auto px-6">
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-purple-600 to-purple-800 p-12 text-center">
-      <div class="absolute -top-16 -right-16 w-64 h-64 bg-white/5 rounded-full"></div>
-      <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-white/5 rounded-full"></div>
+		<section class="py-24 bg-white dark:bg-gray-900">
+			<div class="max-w-4xl mx-auto px-6">
+				<div
+					class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-purple-600 to-purple-800 p-6 sm:p-12 text-center"
+				>
+					<div
+						class="absolute -top-16 -right-16 w-64 h-64 bg-white/5 rounded-full"
+					></div>
+					<div
+						class="absolute -bottom-12 -left-12 w-48 h-48 bg-white/5 rounded-full"
+					></div>
 
-      <!-- Animated cubes in CTA -->
-      <div class="absolute top-8 left-8 w-6 h-6 bg-white/10 rounded-lg cube-1"></div>
-      <div class="absolute top-16 left-24 w-4 h-4 bg-white/10 rounded cube-2"></div>
-      <div class="absolute bottom-8 right-8 w-8 h-8 bg-white/10 rounded-xl cube-4"></div>
-      <div class="absolute bottom-16 right-32 w-4 h-4 bg-white/10 rounded cube-3"></div>
+					<!-- Animated cubes in CTA -->
+					<div
+						class="absolute top-8 left-8 w-6 h-6 bg-white/10 rounded-lg cube-1"
+					></div>
+					<div
+						class="absolute top-16 left-24 w-4 h-4 bg-white/10 rounded cube-2"
+					></div>
+					<div
+						class="absolute bottom-8 right-8 w-8 h-8 bg-white/10 rounded-xl cube-4"
+					></div>
+					<div
+						class="absolute bottom-16 right-32 w-4 h-4 bg-white/10 rounded cube-3"
+					></div>
 
-      <div class="relative">
-        <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-6">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        </div>
-        <h2 class="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
-          Начните работать<br/>как профессионал — сегодня
-        </h2>
-        <p class="text-white/70 text-lg max-w-md mx-auto mb-10">
-          Бесплатно для первых 5 учеников. Никаких карт, никаких обязательств.
-        </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a href="https://app.lessonify.ru" class="bg-white text-primary font-bold px-8 py-4 rounded-full text-base hover:shadow-xl transition-all hover:-translate-y-0.5 inline-flex items-center gap-2">
-            Попробовать бесплатно
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="https://t.me/lessonify" target="_blank" class="border-2 border-white/30 text-white font-semibold px-8 py-4 rounded-full text-base hover:bg-white/10 transition-all inline-flex items-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-            Telegram-канал
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+					<div class="relative">
+						<div
+							class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-6"
+						>
+							<svg
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="white"
+								stroke-width="2.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M12 2L2 7l10 5 10-5-10-5z" />
+								<path d="M2 17l10 5 10-5" />
+								<path d="M2 12l10 5 10-5" />
+							</svg>
+						</div>
+						<h2
+							class="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 leading-tight"
+						>
+							<span data-i18n="cta_title_1">Начните работать</span><br /><span
+								data-i18n="cta_title_2"
+								>как профессионал — сегодня</span
+							>
+						</h2>
+						<p
+							data-i18n="cta_desc"
+							class="text-white/70 text-lg max-w-md mx-auto mb-10"
+						>
+							Бесплатно для первых 5 учеников. Никаких карт, никаких
+							обязательств.
+						</p>
+						<div
+							class="flex flex-col sm:flex-row items-center justify-center gap-4"
+						>
+							<a
+								href="https://app.lessonify.ru"
+								class="bg-white text-primary font-bold px-8 py-4 rounded-full text-base hover:shadow-xl transition-all hover:-translate-y-0.5 inline-flex items-center gap-2"
+							>
+								<span data-i18n="cta_btn">Попробовать бесплатно</span>
+								<svg
+									width="16"
+									height="16"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.5"
+									viewBox="0 0 24 24"
+								>
+									<path d="M5 12h14M12 5l7 7-7 7" />
+								</svg>
+							</a>
+							<a
+								href="https://t.me/lessonify"
+								target="_blank"
+								class="border-2 border-white/30 text-white font-semibold px-8 py-4 rounded-full text-base hover:bg-white/10 transition-all inline-flex items-center gap-2"
+							>
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+									<path
+										d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+									/>
+								</svg>
+								<span data-i18n="cta_tg">Telegram-канал</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      FOOTER
 ══════════════════════════════════════════════════════════════ -->
-<footer class="bg-gray-950 text-white py-16">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
-      <!-- Brand -->
-      <div class="md:col-span-2">
-        <div class="flex items-center gap-2 mb-4">
-          <img src="logo.png" alt="Lessonify" class="w-9 h-9 rounded-xl" />
-          <span class="font-bold text-xl">Lessonify</span>
-        </div>
-        <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
-          Приложение для частных репетиторов: расписание, оплаты, ДЗ и Telegram-напоминания в одном месте.
-        </p>
-        <!-- Telegram links -->
-        <div class="flex gap-3 mt-5">
-          <a href="https://t.me/lessonify_bot" target="_blank" class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 transition-colors rounded-xl px-4 py-2.5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#0088cc"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-            <div>
-              <p class="text-[10px] text-gray-400">Открыть</p>
-              <p class="text-sm font-semibold">Telegram-бот</p>
-            </div>
-          </a>
-          <a href="https://t.me/lessonify" target="_blank" class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 transition-colors rounded-xl px-4 py-2.5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#0088cc"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-            <div>
-              <p class="text-[10px] text-gray-400">Подписаться</p>
-              <p class="text-sm font-semibold">Канал</p>
-            </div>
-          </a>
-        </div>
-        <p class="text-gray-600 text-sm mt-4">Lessonify, 2026</p>
-      </div>
+		<footer class="bg-gray-950 text-white py-16">
+			<div class="max-w-7xl mx-auto px-6">
+				<div
+					class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-8 sm:gap-10 mb-12"
+				>
+					<!-- Brand -->
+					<div class="col-span-2 md:col-span-2">
+						<div class="flex items-center gap-2 mb-4">
+							<img src="logo.png" alt="Lessonify" class="w-9 h-9 rounded-xl" />
+							<span class="font-bold text-xl">Lessonify</span>
+						</div>
+						<p
+							data-i18n="footer_desc"
+							class="text-gray-400 text-sm leading-relaxed max-w-xs"
+						>
+							Приложение для частных репетиторов: расписание, оплаты, ДЗ и
+							Telegram-напоминания в одном месте.
+						</p>
+						<!-- Telegram links -->
+						<div class="flex gap-3 mt-5">
+							<a
+								href="https://t.me/lessonify_bot"
+								target="_blank"
+								class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 transition-colors rounded-xl px-4 py-2.5"
+							>
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="#0088cc">
+									<path
+										d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+									/>
+								</svg>
+								<div>
+									<p data-i18n="footer_open" class="text-[10px] text-gray-400">
+										Открыть
+									</p>
+									<p data-i18n="footer_tgbot" class="text-sm font-semibold">
+										Telegram-бот
+									</p>
+								</div>
+							</a>
+							<a
+								href="https://t.me/lessonify"
+								target="_blank"
+								class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 transition-colors rounded-xl px-4 py-2.5"
+							>
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="#0088cc">
+									<path
+										d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+									/>
+								</svg>
+								<div>
+									<p
+										data-i18n="footer_subscribe"
+										class="text-[10px] text-gray-400"
+									>
+										Подписаться
+									</p>
+									<p data-i18n="footer_channel" class="text-sm font-semibold">
+										Канал
+									</p>
+								</div>
+							</a>
+						</div>
+						<p class="text-gray-600 text-sm mt-4">Lessonify, 2026</p>
+					</div>
 
-      <!-- Links -->
-      <div>
-        <h4 class="font-semibold text-sm mb-4 text-gray-300">Продукт</h4>
-        <ul class="space-y-3 text-sm text-gray-500">
-          <li><a href="#features" class="hover:text-white transition-colors">Возможности</a></li>
-          <li><a href="#pricing" class="hover:text-white transition-colors">Тарифы</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">Что нового</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">Дорожная карта</a></li>
-        </ul>
-      </div>
+					<!-- Links -->
+					<div>
+						<h4
+							data-i18n="footer_product"
+							class="font-semibold text-sm mb-4 text-gray-300"
+						>
+							Продукт
+						</h4>
+						<ul class="space-y-3 text-sm text-gray-500">
+							<li>
+								<a
+									href="#features"
+									data-i18n="footer_features"
+									class="hover:text-white transition-colors"
+									>Возможности</a
+								>
+							</li>
+							<li>
+								<a
+									href="#pricing"
+									data-i18n="footer_pricing"
+									class="hover:text-white transition-colors"
+									>Тарифы</a
+								>
+							</li>
+							<li>
+								<a
+									href="#"
+									data-i18n="footer_whats_new"
+									class="hover:text-white transition-colors"
+									>Что нового</a
+								>
+							</li>
+							<li>
+								<a
+									href="#"
+									data-i18n="footer_roadmap"
+									class="hover:text-white transition-colors"
+									>Дорожная карта</a
+								>
+							</li>
+						</ul>
+					</div>
 
-      <div>
-        <h4 class="font-semibold text-sm mb-4 text-gray-300">Ресурсы</h4>
-        <ul class="space-y-3 text-sm text-gray-500">
-          <li><a href="https://t.me/lessonify" target="_blank" class="hover:text-white transition-colors">Центр помощи</a></li>
-          <li><a href="https://t.me/lessonify" target="_blank" class="hover:text-white transition-colors">Блог / Канал</a></li>
-          <li><a href="https://t.me/lessonify" target="_blank" class="hover:text-white transition-colors">Сообщество</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">Партнёрам</a></li>
-        </ul>
-      </div>
+					<div>
+						<h4
+							data-i18n="footer_resources"
+							class="font-semibold text-sm mb-4 text-gray-300"
+						>
+							Ресурсы
+						</h4>
+						<ul class="space-y-3 text-sm text-gray-500">
+							<li>
+								<a
+									href="https://t.me/lessonify"
+									target="_blank"
+									data-i18n="footer_help"
+									class="hover:text-white transition-colors"
+									>Центр помощи</a
+								>
+							</li>
+							<li>
+								<a
+									href="https://t.me/lessonify"
+									target="_blank"
+									data-i18n="footer_blog"
+									class="hover:text-white transition-colors"
+									>Блог / Канал</a
+								>
+							</li>
+							<li>
+								<a
+									href="https://t.me/lessonify"
+									target="_blank"
+									data-i18n="footer_community"
+									class="hover:text-white transition-colors"
+									>Сообщество</a
+								>
+							</li>
+							<li>
+								<a
+									href="#"
+									data-i18n="footer_partners"
+									class="hover:text-white transition-colors"
+									>Партнёрам</a
+								>
+							</li>
+						</ul>
+					</div>
 
-      <div>
-        <h4 class="font-semibold text-sm mb-4 text-gray-300">Приложение</h4>
-        <ul class="space-y-3 text-sm text-gray-500">
-          <li>
-            <a href="https://app.lessonify.ru" class="hover:text-white transition-colors flex items-center gap-2">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-              Веб-приложение
-            </a>
-          </li>
-          <li>
-            <a href="https://t.me/lessonify_bot" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-              Telegram-бот
-            </a>
-          </li>
-          <li>
-            <a href="https://t.me/lessonify" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"/></svg>
-              Telegram-канал
-            </a>
-          </li>
-          <li>
-            <a href="https://app.lessonify.ru" class="hover:text-white transition-colors flex items-center gap-2 text-xs bg-gray-800 rounded-lg px-3 py-2 mt-2">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Установить как PWA
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+					<div>
+						<h4
+							data-i18n="footer_app"
+							class="font-semibold text-sm mb-4 text-gray-300"
+						>
+							Приложение
+						</h4>
+						<ul class="space-y-3 text-sm text-gray-500">
+							<li>
+								<a
+									href="https://app.lessonify.ru"
+									class="hover:text-white transition-colors flex items-center gap-2"
+								>
+									<svg
+										width="14"
+										height="14"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+									>
+										<rect x="5" y="2" width="14" height="20" rx="2" />
+										<line x1="12" y1="18" x2="12.01" y2="18" />
+									</svg>
+									<span data-i18n="footer_webapp">Веб-приложение</span>
+								</a>
+							</li>
+							<li>
+								<a
+									href="https://t.me/lessonify_bot"
+									target="_blank"
+									class="hover:text-white transition-colors flex items-center gap-2"
+								>
+									<svg
+										width="14"
+										height="14"
+										viewBox="0 0 24 24"
+										fill="currentColor"
+									>
+										<path
+											d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+										/>
+									</svg>
+									<span data-i18n="footer_tgbot">Telegram-бот</span>
+								</a>
+							</li>
+							<li>
+								<a
+									href="https://t.me/lessonify"
+									target="_blank"
+									class="hover:text-white transition-colors flex items-center gap-2"
+								>
+									<svg
+										width="14"
+										height="14"
+										viewBox="0 0 24 24"
+										fill="currentColor"
+									>
+										<path
+											d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.69 7.97c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.61 4.74-4.28c.21-.18-.04-.28-.31-.1l-5.85 3.69-2.52-.79c-.55-.17-.56-.55.12-.82l9.83-3.79c.46-.17.86.11.75.74z"
+										/>
+									</svg>
+									<span data-i18n="footer_tgchannel">Telegram-канал</span>
+								</a>
+							</li>
+							<li>
+								<a
+									href="https://app.lessonify.ru"
+									class="hover:text-white transition-colors flex items-center gap-2 text-xs bg-gray-800 rounded-lg px-3 py-2 mt-2"
+								>
+									<svg
+										width="14"
+										height="14"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+									>
+										<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+										<polyline points="7 10 12 15 17 10" />
+										<line x1="12" y1="15" x2="12" y2="3" />
+									</svg>
+									<span data-i18n="footer_pwa">Установить как PWA</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 
-    <!-- Bottom bar -->
-    <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <p class="text-gray-600 text-sm">© 2026 Lessonify. Все права защищены.</p>
-      <div class="flex gap-6 text-sm text-gray-600">
-        <a href="#" class="hover:text-white transition-colors">Условия использования</a>
-        <a href="#" class="hover:text-white transition-colors">Политика конфиденциальности</a>
-      </div>
-    </div>
-  </div>
-</footer>
+				<!-- Bottom bar -->
+				<div
+					class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4"
+				>
+					<p data-i18n="footer_copyright" class="text-gray-600 text-sm">
+						© 2026 Lessonify. Все права защищены.
+					</p>
+					<div class="flex gap-6 text-sm text-gray-600">
+						<a
+							href="#"
+							data-i18n="footer_terms"
+							class="hover:text-white transition-colors"
+							>Условия использования</a
+						>
+						<a
+							href="#"
+							data-i18n="footer_privacy"
+							class="hover:text-white transition-colors"
+							>Политика конфиденциальности</a
+						>
+					</div>
+				</div>
+			</div>
+		</footer>
 
-<!-- ══════════════════════════════════════════════════════════════
+		<!-- ══════════════════════════════════════════════════════════════
      SCRIPTS
 ══════════════════════════════════════════════════════════════ -->
-<script>
-// ── Theme toggle ─────────────────────────────────────────
-function applyTheme(dark) {
-  if (dark) {
-    document.documentElement.classList.add('dark')
-    document.getElementById('icon-sun').classList.remove('hidden')
-    document.getElementById('icon-moon').classList.add('hidden')
-  } else {
-    document.documentElement.classList.remove('dark')
-    document.getElementById('icon-sun').classList.add('hidden')
-    document.getElementById('icon-moon').classList.remove('hidden')
-  }
-}
+		<script>
+			// ── Theme toggle ─────────────────────────────────────────
+			function applyTheme(dark) {
+				if (dark) {
+					document.documentElement.classList.add('dark')
+					document.getElementById('icon-sun').classList.remove('hidden')
+					document.getElementById('icon-moon').classList.add('hidden')
+				} else {
+					document.documentElement.classList.remove('dark')
+					document.getElementById('icon-sun').classList.add('hidden')
+					document.getElementById('icon-moon').classList.remove('hidden')
+				}
+			}
 
-function toggleTheme() {
-  const isDark = document.documentElement.classList.contains('dark')
-  localStorage.setItem('theme', isDark ? 'light' : 'dark')
-  applyTheme(!isDark)
-}
+			function toggleTheme() {
+				const isDark = document.documentElement.classList.contains('dark')
+				localStorage.setItem('theme', isDark ? 'light' : 'dark')
+				applyTheme(!isDark)
+			}
 
-// Apply saved theme on load
-const savedTheme = localStorage.getItem('theme')
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-applyTheme(savedTheme === 'dark' || (!savedTheme && prefersDark))
+			const savedTheme = localStorage.getItem('theme')
+			const prefersDark = window.matchMedia(
+				'(prefers-color-scheme: dark)',
+			).matches
+			applyTheme(savedTheme === 'dark' || (!savedTheme && prefersDark))
 
-// ── Comparison table data ────────────────────────────────
-const rows = [
-  ['Мобильное приложение', true, false],
-  ['Расписание уроков', true, 'Только таблица'],
-  ['Учёт оплат и должники', true, false],
-  ['ДЗ для учеников', true, false],
-  ['Кабинет ученика', true, false],
-  ['Финансовая аналитика', true, false],
-]
-const rows2 = [
-  ['Telegram-напоминания', true, false],
-  ['Google Calendar синх.', true, false],
-  ['PDF-инвойсы', true, false],
-  ['Онлайн-запись учеников', true, false],
-]
+			// ── Language ─────────────────────────────────────────────
+			let currentLang = localStorage.getItem('lang') || 'ru'
 
-let activeTab = 'lessonify'
+			const translations = {
+				ru: {
+					nav_features: 'Возможности',
+					nav_compare: 'Сравнение',
+					nav_pricing: 'Тарифы',
+					nav_faq: 'FAQ',
+					nav_login: 'Войти',
+					nav_cta: 'Попробовать бесплатно',
+					badge_new: 'Новинка',
+					badge_text: 'Telegram-напоминания для учеников',
+					badge_text_short: 'Telegram-напоминания',
+					badge_try: 'Попробовать →',
+					hero_line1: 'Всё управление',
+					hero_line2: 'репетиторством',
+					hero_line3: 'в одном месте',
+					hero_desc:
+						'Расписание, оплаты, домашние задания, ученики и Telegram-уведомления — всё в одном приложении. Работает с телефона за 2 минуты в день.',
+					hero_btn_tg: 'Telegram-бот',
+					hero_btn_app: 'Открыть приложение',
+					card_payment_title: 'Оплата получена',
+					card_payment_name: 'Анна Смирнова',
+					card_payment_subject: 'Урок математики',
+					card_month: 'Этот месяц',
+					card_vs_prev: 'к прошлому',
+					logos_text: 'Репетиторы используют вместо',
+					logos_tg: 'Telegram-боты',
+					feat_badge: 'Возможности',
+					feat_title: 'Всё что нужно репетитору',
+					feat_desc:
+						'Забудьте о таблицах и хаосе в заметках — весь учёт в одном приложении',
+					feat_schedule_title: 'Умное расписание',
+					feat_schedule_desc:
+						'Все уроки на одном экране. Вид по дням или по месяцу. Добавляете урок за 10 секунд — ученик, предмет, время, цена.',
+					feat_payments_title: 'Учёт оплат',
+					feat_payments_desc:
+						'Кто заплатил, кто должен — всегда на виду. Список должников в один клик.',
+					feat_telegram_title: 'Telegram-напоминания',
+					feat_telegram_desc:
+						'Автоматические уведомления ученикам за час до урока и напоминания об оплате.',
+					feat_students_title: 'База учеников',
+					feat_students_desc:
+						'Карточка каждого ученика с историей уроков, заметками, ДЗ и статусом оплат. Пригласите ученика по ссылке — он видит расписание и задания.',
+					feat_homework_title: 'Домашние задания',
+					feat_homework_desc:
+						'Задавайте ДЗ к уроку. Ученик сдаёт через приложение. Вы видите статус: задано, сдано, проверено.',
+					feat_analytics_title: 'Финансовая аналитика',
+					feat_analytics_desc:
+						'Сколько заработали за месяц, кто должен, динамика дохода — наглядно и понятно.',
+					stats_badge: 'Результаты',
+					stats_title_1: 'Экономит время',
+					stats_title_2: 'и приносит спокойствие',
+					stats_desc:
+						'Репетиторы, которые перешли с таблиц, говорят что экономят 3–5 часов в неделю',
+					stats_saving_label: 'ЭКОНОМИЯ В НЕДЕЛЮ',
+					stats_saving_desc: 'Меньше времени на учёт — больше на уроки',
+					stats_students_label: 'УЧЕНИКОВ ПОД УПРАВЛЕНИЕМ',
+					stats_students_desc: 'Без стресса. Всё структурировано и под рукой',
+					stats_free_label: 'ДО 5 УЧЕНИКОВ',
+					stats_free_desc: 'Попробуйте бесплатно — без лимита по времени',
+					compare_badge: 'Сравнение',
+					compare_title: 'Lessonify заменяет всё остальное',
+					compare_desc: 'Один инструмент вместо таблицы, CRM и ботов',
+					compare_others: 'Другие сервисы',
+					compare_features: 'Основные функции',
+					compare_integrations: 'Интеграции',
+					test_badge: 'Отзывы',
+					test_title: 'Что говорят репетиторы',
+					test_1_text:
+						'\u201cНаконец-то не путаюсь кто заплатил. Вся история по каждому ученику \u2014 за 2 секунды. Рекомендую всем коллегам.\u201d',
+					test_1_role: 'Репетитор математики, Москва',
+					test_2_text:
+						'\u201cУченики стали реже пропускать уроки \u2014 Telegram-напоминания работают лучше чем мои вручную. Экономлю час в день точно.\u201d',
+					test_2_role: 'Репетитор английского, СПб',
+					test_3_text:
+						'\u201cРаботаю с 18 учениками и раньше вела три таблицы. Теперь всё в одном месте. Узнаю сколько заработала за пару секунд.\u201d',
+					test_3_role: 'Репетитор русского, Казань',
+					test_4_text:
+						'\u201cУченик видит расписание и ДЗ сам. Родители перестали писать \u0027а когда урок?\u0027 \u2014 всё в приложении. Очень удобно.\u201d',
+					test_4_role: 'Репетитор физики, Новосибирск',
+					price_badge: 'Тарифы',
+					price_title: 'Простые и честные цены',
+					price_desc:
+						'Начните бесплатно. Переходите на Pro когда будете готовы.',
+					price_monthly: 'Ежемесячно',
+					price_annual: 'Ежегодно',
+					price_free_name: 'Бесплатно',
+					price_free_desc: 'Для старта и знакомства с приложением',
+					price_free_forever: '/навсегда',
+					price_free_btn: 'Начать бесплатно',
+					price_free_f1: 'До 5 учеников',
+					price_free_f2: 'Базовое расписание',
+					price_free_f3: 'Учёт оплат',
+					price_free_f4: 'Telegram-напоминания',
+					price_popular: 'Популярный выбор',
+					price_pro_desc: 'Для серьёзной работы с учениками',
+					price_per_month: '/месяц',
+					price_annual_note: '3 990 ₽ в год — 2 месяца бесплатно',
+					price_pro_btn: 'Подключить Pro',
+					price_pro_f1: 'Неограниченное кол-во учеников',
+					price_pro_f2: 'Инвойсы PDF',
+					price_pro_f3: 'Синхронизация с Google Calendar',
+					price_pro_f4: 'Онлайн-запись для учеников',
+					price_pro_f5: 'Финансовая аналитика',
+					price_pro_f6: 'Журнал уроков с заметками',
+					faq_title: 'Частые вопросы',
+					cta_title_1: 'Начните работать',
+					cta_title_2: 'как профессионал — сегодня',
+					cta_desc:
+						'Бесплатно для первых 5 учеников. Никаких карт, никаких обязательств.',
+					cta_btn: 'Попробовать бесплатно',
+					cta_tg: 'Telegram-канал',
+					footer_desc:
+						'Приложение для частных репетиторов: расписание, оплаты, ДЗ и Telegram-напоминания в одном месте.',
+					footer_open: 'Открыть',
+					footer_subscribe: 'Подписаться',
+					footer_channel: 'Канал',
+					footer_product: 'Продукт',
+					footer_features: 'Возможности',
+					footer_pricing: 'Тарифы',
+					footer_whats_new: 'Что нового',
+					footer_roadmap: 'Дорожная карта',
+					footer_resources: 'Ресурсы',
+					footer_help: 'Центр помощи',
+					footer_blog: 'Блог / Канал',
+					footer_community: 'Сообщество',
+					footer_partners: 'Партнёрам',
+					footer_app: 'Приложение',
+					footer_webapp: 'Веб-приложение',
+					footer_tgbot: 'Telegram-бот',
+					footer_tgchannel: 'Telegram-канал',
+					footer_pwa: 'Установить как PWA',
+					footer_copyright: '© 2026 Lessonify. Все права защищены.',
+					footer_terms: 'Условия использования',
+					footer_privacy: 'Политика конфиденциальности',
+				},
+				en: {
+					nav_features: 'Features',
+					nav_compare: 'Comparison',
+					nav_pricing: 'Pricing',
+					nav_faq: 'FAQ',
+					nav_login: 'Log in',
+					nav_cta: 'Try for free',
+					badge_new: 'New',
+					badge_text: 'Telegram reminders for students',
+					badge_text_short: 'Telegram reminders',
+					badge_try: 'Try it →',
+					hero_line1: 'All your tutoring',
+					hero_line2: 'management',
+					hero_line3: 'in one place',
+					hero_desc:
+						'Schedule, payments, homework, students and Telegram notifications \u2014 all in one app. Works from your phone in 2 minutes a day.',
+					hero_btn_tg: 'Telegram Bot',
+					hero_btn_app: 'Open App',
+					card_payment_title: 'Payment received',
+					card_payment_name: 'Anna Smirnova',
+					card_payment_subject: 'Math lesson',
+					card_month: 'This month',
+					card_vs_prev: 'vs last',
+					logos_text: 'Tutors use instead of',
+					logos_tg: 'Telegram bots',
+					feat_badge: 'Features',
+					feat_title: 'Everything a tutor needs',
+					feat_desc:
+						'Forget spreadsheets and messy notes \u2014 all tracking in one app',
+					feat_schedule_title: 'Smart Schedule',
+					feat_schedule_desc:
+						'All lessons on one screen. Day or month view. Add a lesson in 10 seconds \u2014 student, subject, time, price.',
+					feat_payments_title: 'Payment Tracking',
+					feat_payments_desc:
+						'Who paid, who owes \u2014 always visible. Debtors list in one click.',
+					feat_telegram_title: 'Telegram Reminders',
+					feat_telegram_desc:
+						'Automatic notifications to students one hour before the lesson and payment reminders.',
+					feat_students_title: 'Student Database',
+					feat_students_desc:
+						'Each student\u0027s card with lesson history, notes, homework and payment status. Invite a student via link \u2014 they see their schedule and assignments.',
+					feat_homework_title: 'Homework',
+					feat_homework_desc:
+						'Assign homework per lesson. Students submit via the app. You see the status: assigned, submitted, reviewed.',
+					feat_analytics_title: 'Financial Analytics',
+					feat_analytics_desc:
+						'Monthly earnings, who owes, income trends \u2014 clear and visual.',
+					stats_badge: 'Results',
+					stats_title_1: 'Saves time',
+					stats_title_2: 'and brings peace of mind',
+					stats_desc:
+						'Tutors who switched from spreadsheets say they save 3\u20135 hours per week',
+					stats_saving_label: 'SAVED PER WEEK',
+					stats_saving_desc: 'Less time on tracking \u2014 more on teaching',
+					stats_students_label: 'STUDENTS MANAGED',
+					stats_students_desc: 'Stress-free. Everything organized and at hand',
+					stats_free_label: 'UP TO 5 STUDENTS',
+					stats_free_desc: 'Try for free \u2014 no time limit',
+					compare_badge: 'Comparison',
+					compare_title: 'Lessonify replaces everything else',
+					compare_desc: 'One tool instead of spreadsheets, CRMs and bots',
+					compare_others: 'Other services',
+					compare_features: 'Core Features',
+					compare_integrations: 'Integrations',
+					test_badge: 'Testimonials',
+					test_title: 'What tutors say',
+					test_1_text:
+						'\u201cFinally no more confusion about who paid. Full history for each student \u2014 in 2 seconds. Recommend to all colleagues.\u201d',
+					test_1_role: 'Math tutor, Moscow',
+					test_2_text:
+						'\u201cStudents miss fewer lessons \u2014 Telegram reminders work better than my manual ones. Saving an hour a day for sure.\u201d',
+					test_2_role: 'English tutor, St. Petersburg',
+					test_3_text:
+						'\u201cI work with 18 students and used to maintain three spreadsheets. Now everything is in one place. I check my earnings in seconds.\u201d',
+					test_3_role: 'Russian tutor, Kazan',
+					test_4_text:
+						'\u201cStudents see their schedule and homework themselves. Parents stopped asking \u0027when is the lesson?\u0027 \u2014 everything is in the app. Very convenient.\u201d',
+					test_4_role: 'Physics tutor, Novosibirsk',
+					price_badge: 'Pricing',
+					price_title: 'Simple and fair pricing',
+					price_desc: 'Start for free. Upgrade to Pro when you\u0027re ready.',
+					price_monthly: 'Monthly',
+					price_annual: 'Annually',
+					price_free_name: 'Free',
+					price_free_desc: 'To get started and explore the app',
+					price_free_forever: '/forever',
+					price_free_btn: 'Start for free',
+					price_free_f1: 'Up to 5 students',
+					price_free_f2: 'Basic schedule',
+					price_free_f3: 'Payment tracking',
+					price_free_f4: 'Telegram reminders',
+					price_popular: 'Popular choice',
+					price_pro_desc: 'For serious work with students',
+					price_per_month: '/month',
+					price_annual_note: '3,990 \u20BD per year \u2014 2 months free',
+					price_pro_btn: 'Get Pro',
+					price_pro_f1: 'Unlimited students',
+					price_pro_f2: 'PDF invoices',
+					price_pro_f3: 'Google Calendar sync',
+					price_pro_f4: 'Online booking for students',
+					price_pro_f5: 'Financial analytics',
+					price_pro_f6: 'Lesson journal with notes',
+					faq_title: 'Frequently Asked Questions',
+					cta_title_1: 'Start working',
+					cta_title_2: 'like a pro \u2014 today',
+					cta_desc: 'Free for your first 5 students. No cards, no obligations.',
+					cta_btn: 'Try for free',
+					cta_tg: 'Telegram channel',
+					footer_desc:
+						'App for private tutors: schedule, payments, homework and Telegram reminders in one place.',
+					footer_open: 'Open',
+					footer_subscribe: 'Subscribe',
+					footer_channel: 'Channel',
+					footer_product: 'Product',
+					footer_features: 'Features',
+					footer_pricing: 'Pricing',
+					footer_whats_new: 'What\u0027s new',
+					footer_roadmap: 'Roadmap',
+					footer_resources: 'Resources',
+					footer_help: 'Help center',
+					footer_blog: 'Blog / Channel',
+					footer_community: 'Community',
+					footer_partners: 'Partners',
+					footer_app: 'App',
+					footer_webapp: 'Web app',
+					footer_tgbot: 'Telegram Bot',
+					footer_tgchannel: 'Telegram Channel',
+					footer_pwa: 'Install as PWA',
+					footer_copyright: '\u00A9 2026 Lessonify. All rights reserved.',
+					footer_terms: 'Terms of use',
+					footer_privacy: 'Privacy policy',
+				},
+			}
 
-function renderRows(id, data) {
-  const el = document.getElementById(id)
-  el.innerHTML = ''
-  const isDark = document.documentElement.classList.contains('dark')
-  data.forEach(([feature, ours, theirs], i) => {
-    const bg = i % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'
-    const lessonifyCol = `<div class="py-4 flex justify-center items-center ${activeTab === 'others' ? 'opacity-30' : ''}">
-      ${ours === true
-        ? '<div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center"><svg width="12" height="12" fill="none" stroke="#10B981" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>'
-        : `<span class="text-xs text-primary font-medium">${ours}</span>`}
+			// ── Comparison table data ────────────────────────────────
+			const rows = {
+				ru: [
+					['Мобильное приложение', true, false],
+					['Расписание уроков', true, 'Только таблица'],
+					['Учёт оплат и должники', true, false],
+					['ДЗ для учеников', true, false],
+					['Кабинет ученика', true, false],
+					['Финансовая аналитика', true, false],
+				],
+				en: [
+					['Mobile app', true, false],
+					['Lesson schedule', true, 'Spreadsheet only'],
+					['Payment & debt tracking', true, false],
+					['Homework for students', true, false],
+					['Student portal', true, false],
+					['Financial analytics', true, false],
+				],
+			}
+			const rows2 = {
+				ru: [
+					['Telegram-напоминания', true, false],
+					['Google Calendar синх.', true, false],
+					['PDF-инвойсы', true, false],
+					['Онлайн-запись учеников', true, false],
+				],
+				en: [
+					['Telegram reminders', true, false],
+					['Google Calendar sync', true, false],
+					['PDF invoices', true, false],
+					['Online student booking', true, false],
+				],
+			}
+
+			let activeTab = 'lessonify'
+
+			function renderRows(id, data) {
+				const el = document.getElementById(id)
+				el.innerHTML = ''
+				data.forEach(([feature, ours, theirs], i) => {
+					const bg =
+						i % 2 === 0
+							? 'bg-white dark:bg-gray-900'
+							: 'bg-gray-50/50 dark:bg-gray-800/30'
+					const lessonifyCol = `<div class="py-4 flex justify-center items-center ${activeTab === 'others' ? 'opacity-30' : ''}">
+      ${
+				ours === true
+					? '<div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center"><svg width="12" height="12" fill="none" stroke="#10B981" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>'
+					: `<span class="text-xs text-primary font-medium">${ours}</span>`
+			}
     </div>`
-    const othersCol = `<div class="py-4 flex justify-center items-center ${activeTab === 'lessonify' ? 'opacity-30' : ''}">
-      ${theirs === false
-        ? '<div class="w-6 h-6 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center"><svg width="10" height="10" fill="none" stroke="#EF4444" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>'
-        : `<span class="text-xs text-gray-500">${theirs}</span>`}
+					const othersCol = `<div class="py-4 flex justify-center items-center ${activeTab === 'lessonify' ? 'opacity-30' : ''}">
+      ${
+				theirs === false
+					? '<div class="w-6 h-6 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center"><svg width="10" height="10" fill="none" stroke="#EF4444" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>'
+					: `<span class="text-xs text-gray-500">${theirs}</span>`
+			}
     </div>`
-    el.innerHTML += `
+					el.innerHTML += `
       <div class="grid grid-cols-3 ${bg} border-b border-gray-100 dark:border-gray-800 last:border-0">
         <div class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 font-medium">${feature}</div>
         ${lessonifyCol}
         ${othersCol}
       </div>
     `
-  })
-}
+				})
+			}
 
-function switchCompareTab(tab) {
-  activeTab = tab
-  const tabL = document.getElementById('tab-lessonify')
-  const tabO = document.getElementById('tab-others')
-  if (tab === 'lessonify') {
-    tabL.className = 'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-primary text-white shadow-sm'
-    tabO.className = 'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400'
-  } else {
-    tabO.className = 'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-primary text-white shadow-sm'
-    tabL.className = 'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400'
-  }
-  renderRows('compare-rows', rows)
-  renderRows('compare-rows-2', rows2)
-}
+			function renderComparison() {
+				renderRows('compare-rows', rows[currentLang])
+				renderRows('compare-rows-2', rows2[currentLang])
+			}
 
-switchCompareTab('lessonify')
+			function switchCompareTab(tab) {
+				activeTab = tab
+				const tabL = document.getElementById('tab-lessonify')
+				const tabO = document.getElementById('tab-others')
+				if (tab === 'lessonify') {
+					tabL.className =
+						'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-primary text-white shadow-sm'
+					tabO.className =
+						'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400'
+				} else {
+					tabO.className =
+						'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-primary text-white shadow-sm'
+					tabL.className =
+						'compare-tab px-6 py-2.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400'
+				}
+				renderComparison()
+			}
 
-// ── FAQ ──────────────────────────────────────────────────
-const faqs = [
-  {
-    q: 'Это точно бесплатно для первых 5 учеников?',
-    a: 'Да, бесплатный план не имеет ограничений по времени. Вы можете пользоваться приложением с 5 учениками бесплатно хоть всегда.'
-  },
-  {
-    q: 'Как ученик увидит расписание и ДЗ?',
-    a: 'Вы отправляете ученику ссылку-приглашение. Он регистрируется и видит своё расписание, домашние задания и может их сдавать через приложение.'
-  },
-  {
-    q: 'Как работают Telegram-напоминания?',
-    a: 'Ученик привязывает свой Telegram-аккаунт в приложении. После этого он автоматически получает уведомления за час до урока и напоминания об оплате.'
-  },
-  {
-    q: 'Есть ли мобильное приложение?',
-    a: 'Да, приложение работает как PWA — можно установить на телефон прямо из браузера без App Store. Также есть Telegram-бот для быстрого доступа.'
-  },
-  {
-    q: 'Мои данные в безопасности?',
-    a: 'Все данные хранятся на защищённых серверах. Доступ только у вас. Данные не передаются третьим лицам.'
-  },
-  {
-    q: 'Можно ли отменить Pro и вернуться к бесплатному?',
-    a: 'Да, в любой момент. После отмены вы сможете продолжать использовать бесплатный план с 5 учениками.'
-  },
-]
+			switchCompareTab('lessonify')
 
-const faqList = document.getElementById('faq-list')
-faqs.forEach((item, i) => {
-  faqList.innerHTML += `
-    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-      <button onclick="toggleFaq(${i})" class="w-full flex items-center justify-between px-6 py-5 text-left gap-4">
-        <span class="font-semibold text-gray-900 dark:text-white text-base">${item.q}</span>
-        <span id="icon-${i}" class="accordion-icon text-gray-400 dark:text-gray-500 text-2xl leading-none shrink-0">+</span>
-      </button>
-      <div class="accordion-inner" id="faq-${i}">
-        <div>
-          <p class="px-6 pb-5 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">${item.a}</p>
+			// ── FAQ ──────────────────────────────────────────────────
+			const faqs = {
+				ru: [
+					{
+						q: 'Это точно бесплатно для первых 5 учеников?',
+						a: 'Да, бесплатный план не имеет ограничений по времени. Вы можете пользоваться приложением с 5 учениками бесплатно хоть всегда.',
+					},
+					{
+						q: 'Как ученик увидит расписание и ДЗ?',
+						a: 'Вы отправляете ученику ссылку-приглашение. Он регистрируется и видит своё расписание, домашние задания и может их сдавать через приложение.',
+					},
+					{
+						q: 'Как работают Telegram-напоминания?',
+						a: 'Ученик привязывает свой Telegram-аккаунт в приложении. После этого он автоматически получает уведомления за час до урока и напоминания об оплате.',
+					},
+					{
+						q: 'Есть ли мобильное приложение?',
+						a: 'Да, приложение работает как PWA — можно установить на телефон прямо из браузера без App Store. Также есть Telegram-бот для быстрого доступа.',
+					},
+					{
+						q: 'Мои данные в безопасности?',
+						a: 'Все данные хранятся на защищённых серверах. Доступ только у вас. Данные не передаются третьим лицам.',
+					},
+					{
+						q: 'Можно ли отменить Pro и вернуться к бесплатному?',
+						a: 'Да, в любой момент. После отмены вы сможете продолжать использовать бесплатный план с 5 учениками.',
+					},
+				],
+				en: [
+					{
+						q: 'Is it really free for the first 5 students?',
+						a: 'Yes, the free plan has no time limit. You can use the app with 5 students for free forever.',
+					},
+					{
+						q: 'How will students see the schedule and homework?',
+						a: 'You send the student an invitation link. They sign up and can see their schedule, homework and submit assignments through the app.',
+					},
+					{
+						q: 'How do Telegram reminders work?',
+						a: 'The student connects their Telegram account in the app. After that, they automatically receive notifications one hour before the lesson and payment reminders.',
+					},
+					{
+						q: 'Is there a mobile app?',
+						a: 'Yes, the app works as a PWA \u2014 you can install it on your phone directly from the browser without the App Store. There\u0027s also a Telegram bot for quick access.',
+					},
+					{
+						q: 'Is my data safe?',
+						a: 'All data is stored on secure servers. Only you have access. Data is not shared with third parties.',
+					},
+					{
+						q: 'Can I cancel Pro and go back to free?',
+						a: 'Yes, at any time. After cancellation, you can continue using the free plan with 5 students.',
+					},
+				],
+			}
+
+			function renderFaq() {
+				const faqList = document.getElementById('faq-list')
+				faqList.innerHTML = ''
+				const items = faqs[currentLang]
+				items.forEach((item, i) => {
+					faqList.innerHTML += `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+        <button onclick="toggleFaq(${i})" class="w-full flex items-center justify-between px-6 py-5 text-left gap-4">
+          <span class="font-semibold text-gray-900 dark:text-white text-base">${item.q}</span>
+          <span id="icon-${i}" class="accordion-icon text-gray-400 dark:text-gray-500 text-2xl leading-none shrink-0">+</span>
+        </button>
+        <div class="accordion-inner" id="faq-${i}">
+          <div>
+            <p class="px-6 pb-5 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">${item.a}</p>
+          </div>
         </div>
       </div>
-    </div>
-  `
-})
+    `
+				})
+			}
 
-function toggleFaq(i) {
-  const content = document.getElementById(`faq-${i}`)
-  const icon = document.getElementById(`icon-${i}`)
-  const isOpen = content.classList.contains('open')
+			renderFaq()
 
-  // Close all
-  document.querySelectorAll('.accordion-inner').forEach(el => el.classList.remove('open'))
-  document.querySelectorAll('.accordion-icon').forEach(el => {
-    el.classList.remove('open')
-    el.textContent = '+'
-  })
+			function toggleFaq(i) {
+				const content = document.getElementById(`faq-${i}`)
+				const icon = document.getElementById(`icon-${i}`)
+				const isOpen = content.classList.contains('open')
 
-  // Open clicked if it was closed
-  if (!isOpen) {
-    content.classList.add('open')
-    icon.classList.add('open')
-  }
-}
+				document
+					.querySelectorAll('.accordion-inner')
+					.forEach((el) => el.classList.remove('open'))
+				document.querySelectorAll('.accordion-icon').forEach((el) => {
+					el.classList.remove('open')
+					el.textContent = '+'
+				})
 
-// ── Testimonials slider ──────────────────────────────────
-let testimonialIndex = 0
-const track = document.getElementById('testimonialTrack')
+				if (!isOpen) {
+					content.classList.add('open')
+					icon.classList.add('open')
+				}
+			}
 
-function getVisibleCount() {
-  if (window.innerWidth >= 1024) return 3
-  if (window.innerWidth >= 768) return 2
-  return 1
-}
+			// ── Testimonials slider ──────────────────────────────────
+			let testimonialIndex = 0
+			const track = document.getElementById('testimonialTrack')
 
-function updateTestimonial() {
-  const cards = track.children
-  const total = cards.length
-  const visible = getVisibleCount()
-  const max = total - visible
-  testimonialIndex = Math.max(0, Math.min(testimonialIndex, max))
-  const cardWidth = cards[0].offsetWidth + 24
-  track.style.transform = `translateX(-${testimonialIndex * cardWidth}px)`
-}
+			function getVisibleCount() {
+				if (window.innerWidth >= 1024) return 3
+				if (window.innerWidth >= 768) return 2
+				return 1
+			}
 
-function nextTestimonial() { testimonialIndex++; updateTestimonial() }
-function prevTestimonial() { testimonialIndex--; updateTestimonial() }
-window.addEventListener('resize', updateTestimonial)
+			function updateTestimonial() {
+				const cards = track.children
+				const total = cards.length
+				const visible = getVisibleCount()
+				const max = total - visible
+				testimonialIndex = Math.max(0, Math.min(testimonialIndex, max))
+				const cardWidth = cards[0].offsetWidth + 24
+				track.style.transform = `translateX(-${testimonialIndex * cardWidth}px)`
+			}
 
-// ── Pricing toggle ───────────────────────────────────────
-function setPricing(type) {
-  const monthly = document.getElementById('monthly-btn')
-  const annual = document.getElementById('annual-btn')
-  const price = document.getElementById('price-display')
-  const period = document.getElementById('period-display')
-  const note = document.getElementById('annual-note')
-  const isDark = document.documentElement.classList.contains('dark')
-  const activeCls = isDark ? 'bg-gray-700 text-white shadow-sm' : 'bg-white text-gray-900 shadow-sm'
-  const inactiveCls = 'text-gray-500 dark:text-gray-400'
+			function nextTestimonial() {
+				testimonialIndex++
+				updateTestimonial()
+			}
+			function prevTestimonial() {
+				testimonialIndex--
+				updateTestimonial()
+			}
+			window.addEventListener('resize', updateTestimonial)
 
-  if (type === 'monthly') {
-    monthly.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${activeCls}`
-    annual.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${inactiveCls}`
-    price.textContent = '499 ₽'
-    period.textContent = '/месяц'
-    note.classList.add('hidden')
-  } else {
-    annual.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${activeCls}`
-    monthly.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${inactiveCls}`
-    price.textContent = '333 ₽'
-    period.textContent = '/месяц'
-    note.classList.remove('hidden')
-  }
-}
+			// ── Pricing toggle ───────────────────────────────────────
+			function setPricing(type) {
+				const monthly = document.getElementById('monthly-btn')
+				const annual = document.getElementById('annual-btn')
+				const price = document.getElementById('price-display')
+				const period = document.getElementById('period-display')
+				const note = document.getElementById('annual-note')
+				const isDark = document.documentElement.classList.contains('dark')
+				const activeCls = isDark
+					? 'bg-gray-700 text-white shadow-sm'
+					: 'bg-white text-gray-900 shadow-sm'
+				const inactiveCls = 'text-gray-500 dark:text-gray-400'
 
-// ── Scroll animations ────────────────────────────────────
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible')
-  })
-}, { threshold: 0.1 })
+				if (type === 'monthly') {
+					monthly.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${activeCls}`
+					annual.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${inactiveCls}`
+					price.textContent = '499 ₽'
+					period.textContent = translations[currentLang].price_per_month
+					note.classList.add('hidden')
+				} else {
+					annual.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${activeCls}`
+					monthly.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all ${inactiveCls}`
+					price.textContent = '333 ₽'
+					period.textContent = translations[currentLang].price_per_month
+					note.classList.remove('hidden')
+				}
+			}
 
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el))
+			// ── Language switching ───────────────────────────────────
+			function setLang(lang) {
+				currentLang = lang
+				localStorage.setItem('lang', lang)
+				document.documentElement.lang = lang
+				document.getElementById('lang-toggle').textContent = lang.toUpperCase()
+				document.title =
+					lang === 'ru'
+						? 'Lessonify — приложение для репетиторов'
+						: 'Lessonify — app for tutors'
 
-// ── Smooth scroll for nav ────────────────────────────────
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const href = a.getAttribute('href')
-    if (href === '#') return
-    const target = document.querySelector(href)
-    if (target) {
-      e.preventDefault()
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  })
-})
-</script>
-</body>
+				document.querySelectorAll('[data-i18n]').forEach((el) => {
+					const key = el.getAttribute('data-i18n')
+					if (translations[lang] && translations[lang][key]) {
+						el.textContent = translations[lang][key]
+					}
+				})
+
+				renderFaq()
+				renderComparison()
+				setPricing(
+					document.getElementById('annual-note').classList.contains('hidden')
+						? 'monthly'
+						: 'annual',
+				)
+			}
+
+			function toggleLang() {
+				setLang(currentLang === 'ru' ? 'en' : 'ru')
+			}
+
+			// ── Scroll animations ────────────────────────────────────
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) entry.target.classList.add('visible')
+					})
+				},
+				{ threshold: 0.1 },
+			)
+
+			document
+				.querySelectorAll('.fade-up')
+				.forEach((el) => observer.observe(el))
+
+			// ── Mobile menu ─────────────────────────────────────────
+			function toggleMobileMenu() {
+				const menu = document.getElementById('mobile-menu')
+				const burgerIcon = document.getElementById('burger-icon')
+				const closeIcon = document.getElementById('close-icon')
+				const isHidden = menu.classList.contains('hidden')
+				if (isHidden) {
+					menu.classList.remove('hidden')
+					burgerIcon.classList.add('hidden')
+					closeIcon.classList.remove('hidden')
+				} else {
+					menu.classList.add('hidden')
+					burgerIcon.classList.remove('hidden')
+					closeIcon.classList.add('hidden')
+				}
+			}
+
+			function closeMobileMenu() {
+				const menu = document.getElementById('mobile-menu')
+				const burgerIcon = document.getElementById('burger-icon')
+				const closeIcon = document.getElementById('close-icon')
+				menu.classList.add('hidden')
+				burgerIcon.classList.remove('hidden')
+				closeIcon.classList.add('hidden')
+			}
+
+			// ── Smooth scroll for nav ────────────────────────────────
+			document.querySelectorAll('a[href^="#"]').forEach((a) => {
+				a.addEventListener('click', (e) => {
+					const href = a.getAttribute('href')
+					if (href === '#') return
+					const target = document.querySelector(href)
+					if (target) {
+						e.preventDefault()
+						target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					}
+				})
+			})
+
+			// ── Initialize language ──────────────────────────────────
+			setLang(currentLang)
+		</script>
+	</body>
 </html>
