@@ -418,12 +418,29 @@
 				overflow: hidden;
 			}
 
+			/* Explicit visible fallback: if GSAP/Lenis never load (or fail),
+			   <html> never gets .gsap-anim, so any [data-reveal] element — in
+			   markup or tagged by JS — stays fully visible. No stuck opacity:0. */
+			html:not(.gsap-anim) [data-reveal] {
+				opacity: 1;
+				transform: none;
+			}
+
 			/* GSAP reveal base: hidden ONLY when JS marks the doc ready.
 			   Without JS / with reduced-motion, content stays fully visible. */
 			html.gsap-anim [data-reveal] {
 				opacity: 0;
-				transform: translateY(28px);
+				transform: translateY(48px) scale(0.96);
 				will-change: transform, opacity;
+			}
+
+			/* When GSAP drives reveals, neutralise the legacy .fade-up
+			   IntersectionObserver path so the same wrapper is never animated
+			   twice. Children carry [data-reveal] and GSAP handles them. */
+			html.gsap-anim .fade-up {
+				opacity: 1 !important;
+				transform: none !important;
+				transition: none !important;
 			}
 
 			/* Subtle 3D tilt: smooth return on pointer-leave */
@@ -436,8 +453,8 @@
 					display: none;
 				}
 				html.gsap-anim [data-reveal] {
-					opacity: 1;
-					transform: none;
+					opacity: 1 !important;
+					transform: none !important;
 				}
 			}
 		</style>
@@ -804,9 +821,10 @@
 				</div>
 
 				<!-- Phone mockup + floating cards -->
-				<div class="relative flex justify-center">
+				<div data-hero-stage class="relative flex justify-center">
 					<!-- Floating left card -->
 					<div
+						data-hero-card="payment"
 						class="absolute left-0 top-1/4 hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 w-52 z-10 border border-gray-100 dark:border-gray-700"
 					>
 						<div class="flex items-center gap-2 mb-3">
@@ -849,6 +867,7 @@
 
 					<!-- Floating right card -->
 					<div
+						data-hero-card="income"
 						class="absolute right-0 top-12 hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 w-48 z-10 border border-gray-100 dark:border-gray-700"
 					>
 						<p data-i18n="card_month" class="text-xs text-gray-400 mb-2">
@@ -3842,12 +3861,15 @@
 					})
 				}
 
-				/* ── 3. Hero parallax (blobs at different depths + phone) ───── */
+				/* ── 3. Hero parallax + scrubbed phone transform ───────────────
+				   Desktop only. All animated props are transform/opacity, so no
+				   layout reflow / CLS. The LCP headline (h1) is never touched. */
 				if (isDesktop) {
 					const hero = document.querySelector('.hero-bg')
 					if (hero) {
+						// Blobs separate by depth — stronger movement than before.
 						const blobs = hero.querySelectorAll('.blob')
-						const depths = [18, -14, 26]
+						const depths = [42, -34, 56]
 						blobs.forEach((blob, i) => {
 							gsap.to(blob, {
 								yPercent: depths[i % depths.length],
@@ -3861,10 +3883,27 @@
 							})
 						})
 
-						const phone = hero.querySelector('.phone-frame')
-						if (phone) {
-							gsap.to(phone, {
-								yPercent: -8,
+						// Floating cards drift at clearly different depths so they
+						// visibly separate from the phone as the hero scrolls.
+						const paymentCard = hero.querySelector(
+							'[data-hero-card="payment"]',
+						)
+						if (paymentCard) {
+							gsap.to(paymentCard, {
+								yPercent: -28,
+								ease: 'none',
+								scrollTrigger: {
+									trigger: hero,
+									start: 'top top',
+									end: 'bottom top',
+									scrub: true,
+								},
+							})
+						}
+						const incomeCard = hero.querySelector('[data-hero-card="income"]')
+						if (incomeCard) {
+							gsap.to(incomeCard, {
+								yPercent: 22,
 								ease: 'none',
 								scrollTrigger: {
 									trigger: hero,
@@ -3875,45 +3914,181 @@
 							})
 						}
 
-						// Subtle fade/translate of hero copy as the hero scrolls away.
-						// LCP-safe: starts visible (no opacity:0 on load), only moves on scroll.
-						const heroCopy = hero.querySelector('.max-w-7xl')
-						if (heroCopy) {
-							gsap.to(heroCopy, {
-								y: -40,
-								opacity: 0.55,
-								ease: 'none',
-								scrollTrigger: {
-									trigger: hero,
-									start: 'center center',
-									end: 'bottom top',
-									scrub: true,
+						// ★ SCRUBBED "element changes as you scroll" moment ★
+						// The hero phone clearly scales down, rotates and rises while
+						// you scroll past the hero. transform-only → layout-safe.
+						const stage = hero.querySelector('[data-hero-stage]')
+						const phone = hero.querySelector('.phone-frame')
+						if (phone) {
+							gsap.fromTo(
+								phone,
+								{ scale: 1.05, rotation: 0, yPercent: 0 },
+								{
+									scale: 0.9,
+									rotation: -4,
+									yPercent: -14,
+									transformOrigin: '50% 40%',
+									ease: 'none',
+									scrollTrigger: {
+										trigger: stage || hero,
+										start: 'top 70%',
+										end: 'bottom top',
+										scrub: true,
+									},
 								},
-							})
+							)
+						}
+
+						// Gentle upward drift + fade of the hero TEXT block as it
+						// leaves (badge / headline / desc / CTA) — explicitly NOT the
+						// phone stage, so the phone's scrub transform reads clearly.
+						// Starts fully visible on load so the LCP headline is safe.
+						const inner = hero.querySelector('.max-w-7xl')
+						if (inner) {
+							const copy = Array.from(inner.children).filter(
+								(el) => el !== stage,
+							)
+							if (copy.length) {
+								gsap.to(copy, {
+									yPercent: -22,
+									opacity: 0.5,
+									ease: 'none',
+									scrollTrigger: {
+										trigger: hero,
+										start: 'center center',
+										end: 'bottom top',
+										scrub: true,
+									},
+								})
+							}
 						}
 					}
 				}
 
-				/* ── 4. Staggered reveal-on-scroll for [data-reveal] blocks ─── */
-				const revealEls = gsap.utils.toArray('[data-reveal]')
-				if (revealEls.length) {
-					ScrollTrigger.batch(revealEls, {
-						start: 'top 88%',
-						once: true,
-						onEnter: (batch) =>
-							gsap.to(batch, {
-								opacity: 1,
-								y: 0,
-								duration: 0.6,
-								ease: 'power2.out',
-								stagger: 0.08,
-								overwrite: true,
-								onComplete: function () {
-									batch.forEach((el) => el.style.removeProperty('will-change'))
-								},
-							}),
+				/* ── 4. Pronounced staggered reveals across ALL major blocks ──
+				   Each section reveals as ONE group: its eyebrow / h2 / subtitle
+				   first, then its content cards, with a clear stagger. The legacy
+				   .fade-up IntersectionObserver is neutralised by CSS when
+				   html.gsap-anim is present, so nothing animates twice. */
+
+				// Ensure the element carries [data-reveal] (so the CSS hidden
+				// state applies) and return it for inclusion in a reveal group.
+				// Already-tagged markup elements (e.g. feature cards) still flow
+				// through so GSAP animates them — they're never left at opacity:0.
+				const markReveal = (el) => {
+					if (!el) return null
+					if (!el.hasAttribute('data-reveal'))
+						el.setAttribute('data-reveal', '')
+					return el
+				}
+
+				// Collect a section's intro header parts (eyebrow span / h2 / p).
+				const headerEls = (section) => {
+					const header = section && section.querySelector('.text-center')
+					if (!header) return []
+					return Array.from(
+						header.querySelectorAll(':scope > span, :scope > h2, :scope > p'),
+					)
+				}
+
+				const sectionByHeading = (i18n) => {
+					const h = document.querySelector('[data-i18n="' + i18n + '"]')
+					return h ? h.closest('section') : null
+				}
+
+				const revealTween = (els) => {
+					const list = els.filter(Boolean)
+					if (!list.length) return
+					gsap.to(list, {
+						opacity: 1,
+						y: 0,
+						scale: 1,
+						duration: 0.7,
+						ease: 'power3.out',
+						stagger: 0.1,
+						overwrite: true,
+						onComplete: () =>
+							list.forEach((el) => el.style.removeProperty('will-change')),
 					})
 				}
+
+				// Build per-section reveal groups: header parts + content cards.
+				const groups = []
+
+				const features = document.getElementById('features')
+				if (features) {
+					groups.push([
+						...headerEls(features),
+						...features.querySelectorAll('.feature-card'),
+					])
+				}
+
+				// "Aggregators" section (3 feature-cards, no id).
+				const aggSection = sectionByHeading('agg_title')
+				if (aggSection) {
+					groups.push([
+						...headerEls(aggSection),
+						...aggSection.querySelectorAll('.feature-card'),
+					])
+				}
+
+				// Stats section: cards are plain .rounded-3xl tiles (no .feature-card).
+				const statsSection = sectionByHeading('stats_desc')
+				if (statsSection) {
+					groups.push([
+						...headerEls(statsSection),
+						...statsSection.querySelectorAll('.grid > div'),
+					])
+				}
+
+				// Compare: header + the tab switcher and table (children of the
+				// .fade-up wrapper — never the wrapper itself, since the
+				// html.gsap-anim .fade-up{} rule forces .fade-up visible). Rows
+				// are tab-toggled by switchCompareTab and left untouched.
+				const compare = document.getElementById('compare')
+				if (compare) {
+					const compareWrap = compare.querySelector('.fade-up')
+					groups.push([
+						...headerEls(compare),
+						...(compareWrap ? Array.from(compareWrap.children) : []),
+					])
+				}
+
+				// Testimonials: header only (slides live in the JS carousel track).
+				const testSection = sectionByHeading('test_title')
+				if (testSection) groups.push(headerEls(testSection))
+
+				// Pricing: header + the two plan cards.
+				const pricing = document.getElementById('pricing')
+				if (pricing) {
+					groups.push([
+						...headerEls(pricing),
+						...pricing.querySelectorAll('.grid.items-stretch > div'),
+					])
+				}
+
+				// FAQ: header only (accordion items are injected + toggle height).
+				const faq = document.getElementById('faq')
+				if (faq) groups.push(headerEls(faq))
+
+				// Final CTA banner: reveal its inner content block as a unit.
+				const ctaInner = document.querySelector(
+					'section .bg-gradient-to-br.from-primary > .relative',
+				)
+				if (ctaInner) groups.push([ctaInner])
+
+				// Tag everything, then wire one ScrollTrigger per group so the
+				// stagger reads per-section.
+				groups.forEach((raw) => {
+					const els = raw.filter(Boolean).map(markReveal).filter(Boolean)
+					if (!els.length) return
+					ScrollTrigger.create({
+						trigger: els[0],
+						start: 'top 85%',
+						once: true,
+						onEnter: () => revealTween(els),
+					})
+				})
 
 				/* ── 5. Animated number counters (STATS section, once) ──────── */
 				gsap.utils.toArray('[data-counter]').forEach((el) => {
