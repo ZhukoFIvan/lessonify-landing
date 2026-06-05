@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -388,11 +388,66 @@
 				border-color: #6c63ff;
 				color: #8b85ff;
 			}
+
+			/* ── Scroll-storytelling layer (Lenis + GSAP) ─────────────────── */
+			/* Top scroll-progress bar */
+			#scroll-progress {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 3px;
+				z-index: 100;
+				transform: scaleX(0);
+				transform-origin: 0 50%;
+				background: linear-gradient(90deg, #6c63ff 0%, #a855f7 55%, #ec4899 100%);
+				box-shadow: 0 1px 8px rgba(108, 99, 255, 0.45);
+				pointer-events: none;
+				will-change: transform;
+			}
+
+			/* Lenis recommended styles (only active once .lenis is on <html>) */
+			html.lenis,
+			html.lenis body {
+				height: auto;
+			}
+			.lenis.lenis-smooth {
+				scroll-behavior: auto !important;
+			}
+			.lenis.lenis-stopped {
+				overflow: hidden;
+			}
+
+			/* GSAP reveal base: hidden ONLY when JS marks the doc ready.
+			   Without JS / with reduced-motion, content stays fully visible. */
+			html.gsap-anim [data-reveal] {
+				opacity: 0;
+				transform: translateY(28px);
+				will-change: transform, opacity;
+			}
+
+			/* Subtle 3D tilt: smooth return on pointer-leave */
+			.feature-card {
+				transform-style: preserve-3d;
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				#scroll-progress {
+					display: none;
+				}
+				html.gsap-anim [data-reveal] {
+					opacity: 1;
+					transform: none;
+				}
+			}
 		</style>
 	</head>
 	<body
 		class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-x-hidden transition-colors duration-300"
 	>
+		<!-- Top scroll-progress bar (filled via GSAP ScrollTrigger) -->
+		<div id="scroll-progress" aria-hidden="true"></div>
+
 		<!-- ══════════════════════════════════════════════════════════════
      NAVBAR
 ══════════════════════════════════════════════════════════════ -->
@@ -1262,7 +1317,8 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					<!-- Big card 1: Schedule -->
 					<div
-						class="feature-card md:col-span-2 bg-gradient-to-br from-primary/5 to-purple-50 dark:from-primary/10 dark:to-purple-900/20 rounded-3xl p-8 border border-primary/10 dark:border-primary/20"
+						data-reveal
+					class="feature-card md:col-span-2 bg-gradient-to-br from-primary/5 to-purple-50 dark:from-primary/10 dark:to-purple-900/20 rounded-3xl p-8 border border-primary/10 dark:border-primary/20"
 					>
 						<div class="flex flex-col md:flex-row gap-6 items-start">
 							<div class="flex-1">
@@ -1457,7 +1513,8 @@
 
 					<!-- Card: Payments -->
 					<div
-						class="feature-card bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/10 rounded-3xl p-6 border border-green-100 dark:border-green-800/30"
+						data-reveal
+					class="feature-card bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/10 rounded-3xl p-6 border border-green-100 dark:border-green-800/30"
 					>
 						<div
 							class="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/40 flex items-center justify-center mb-4"
@@ -1525,7 +1582,8 @@
 
 					<!-- Card: Telegram -->
 					<div
-						class="feature-card bg-gradient-to-br from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/10 rounded-3xl p-6 border border-blue-100 dark:border-blue-800/30"
+						data-reveal
+					class="feature-card bg-gradient-to-br from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/10 rounded-3xl p-6 border border-blue-100 dark:border-blue-800/30"
 					>
 						<div
 							class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mb-4"
@@ -1576,7 +1634,8 @@
 
 					<!-- Big card 2: Students -->
 					<div
-						class="feature-card md:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-3xl p-8 border border-amber-100 dark:border-amber-800/30"
+						data-reveal
+					class="feature-card md:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-3xl p-8 border border-amber-100 dark:border-amber-800/30"
 					>
 						<div class="flex flex-col md:flex-row gap-6 items-start">
 							<div class="flex-1">
@@ -1685,7 +1744,8 @@
 
 					<!-- Card: Homework -->
 					<div
-						class="feature-card bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/10 rounded-3xl p-6 border border-purple-100 dark:border-purple-800/30"
+						data-reveal
+					class="feature-card bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/10 rounded-3xl p-6 border border-purple-100 dark:border-purple-800/30"
 					>
 						<div
 							class="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mb-4"
@@ -1719,7 +1779,8 @@
 
 					<!-- Card: Analytics -->
 					<div
-						class="feature-card bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/10 rounded-3xl p-6 border border-rose-100 dark:border-rose-800/30"
+						data-reveal
+					class="feature-card bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/10 rounded-3xl p-6 border border-rose-100 dark:border-rose-800/30"
 					>
 						<div
 							class="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center mb-4"
@@ -1784,7 +1845,8 @@
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-up">
 					<!-- Card 1 -->
 					<div
-						class="feature-card bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 border border-gray-100 dark:border-gray-700"
+						data-reveal
+					class="feature-card bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 border border-gray-100 dark:border-gray-700"
 					>
 						<div
 							class="w-12 h-12 rounded-2xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4"
@@ -1819,7 +1881,8 @@
 
 					<!-- Card 2 -->
 					<div
-						class="feature-card bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 border border-gray-100 dark:border-gray-700"
+						data-reveal
+					class="feature-card bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 border border-gray-100 dark:border-gray-700"
 					>
 						<div
 							class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mb-4"
@@ -1854,7 +1917,8 @@
 
 					<!-- Card 3 -->
 					<div
-						class="feature-card bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 border border-gray-100 dark:border-gray-700"
+						data-reveal
+					class="feature-card bg-gray-50 dark:bg-gray-800/50 rounded-3xl p-6 border border-gray-100 dark:border-gray-700"
 					>
 						<div
 							class="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4"
@@ -1921,7 +1985,13 @@
 					<div
 						class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm"
 					>
-						<div class="text-4xl sm:text-5xl font-black text-primary mb-2">
+						<div
+							class="text-4xl sm:text-5xl font-black text-primary mb-2"
+							data-counter
+							data-count-to="5"
+							data-count-prefix="3–"
+							data-count-suffix="ч"
+						>
 							3–5ч
 						</div>
 						<div
@@ -1940,7 +2010,13 @@
 					<div
 						class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 shadow-sm"
 					>
-						<div class="text-4xl sm:text-5xl font-black text-primary mb-2">
+						<div
+							class="text-4xl sm:text-5xl font-black text-primary mb-2"
+							data-counter
+							data-count-to="12"
+							data-count-prefix=""
+							data-count-suffix="+"
+						>
 							12+
 						</div>
 						<div
@@ -3675,6 +3751,241 @@
 
 			// ── Initialize language ──────────────────────────────────
 			setLang(currentLang)
+		</script>
+
+		<!-- ══════════════════════════════════════════════════════════════
+     SCROLL-STORYTELLING LAYER  (Lenis smooth-scroll + GSAP ScrollTrigger)
+     Loaded AFTER the main inline script so existing handlers & the DOM
+     are ready. Fails gracefully if a CDN library is unavailable.
+══════════════════════════════════════════════════════════════ -->
+		<script src="https://unpkg.com/lenis@1.3.23/dist/lenis.min.js" defer></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+			defer
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+			defer
+		></script>
+		<script>
+			// Deferred external libs above run after parse, before DOMContentLoaded,
+			// so window.gsap / window.Lenis are ready inside this listener.
+			window.addEventListener('DOMContentLoaded', () => {
+				const reduceMotion = window.matchMedia(
+					'(prefers-reduced-motion: reduce)',
+				).matches
+
+				const gsap = window.gsap
+				const ScrollTrigger = window.ScrollTrigger
+				const Lenis = window.Lenis
+
+				// Graceful bail-out: no GSAP, or user prefers reduced motion.
+				// Content stays fully visible (html.gsap-anim never added → no hidden state).
+				if (!gsap || !ScrollTrigger || reduceMotion) return
+
+				gsap.registerPlugin(ScrollTrigger)
+
+				const isDesktop =
+					window.matchMedia('(min-width: 1024px)').matches &&
+					window.matchMedia('(pointer: fine)').matches
+
+				// Enable the [data-reveal] hidden-then-reveal CSS only now that we
+				// know GSAP is present and motion is allowed.
+				document.documentElement.classList.add('gsap-anim')
+
+				/* ── 1. Lenis smooth scroll (desktop + fine pointer only) ───── */
+				let lenis = null
+				if (Lenis && isDesktop) {
+					lenis = new Lenis({
+						duration: 1.1,
+						easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+						smoothWheel: true,
+					})
+					lenis.on('scroll', ScrollTrigger.update)
+					gsap.ticker.add((time) => {
+						lenis.raf(time * 1000)
+					})
+					gsap.ticker.lagSmoothing(0)
+
+					// Keep anchor-nav working with Lenis. Capture phase + stopPropagation
+					// prevents the existing scrollIntoView handler from also firing.
+					document.addEventListener(
+						'click',
+						(e) => {
+							const a = e.target.closest('a[href^="#"]')
+							if (!a) return
+							const href = a.getAttribute('href')
+							if (!href || href === '#') return
+							const target = document.querySelector(href)
+							if (!target) return
+							e.preventDefault()
+							e.stopPropagation()
+							if (typeof closeMobileMenu === 'function') closeMobileMenu()
+							lenis.scrollTo(target, { offset: -72 })
+						},
+						true,
+					)
+				}
+
+				/* ── 2. Top scroll-progress bar ─────────────────────────────── */
+				const progress = document.getElementById('scroll-progress')
+				if (progress) {
+					gsap.to(progress, {
+						scaleX: 1,
+						ease: 'none',
+						scrollTrigger: {
+							trigger: document.documentElement,
+							start: 'top top',
+							end: 'bottom bottom',
+							scrub: 0.3,
+						},
+					})
+				}
+
+				/* ── 3. Hero parallax (blobs at different depths + phone) ───── */
+				if (isDesktop) {
+					const hero = document.querySelector('.hero-bg')
+					if (hero) {
+						const blobs = hero.querySelectorAll('.blob')
+						const depths = [18, -14, 26]
+						blobs.forEach((blob, i) => {
+							gsap.to(blob, {
+								yPercent: depths[i % depths.length],
+								ease: 'none',
+								scrollTrigger: {
+									trigger: hero,
+									start: 'top top',
+									end: 'bottom top',
+									scrub: true,
+								},
+							})
+						})
+
+						const phone = hero.querySelector('.phone-frame')
+						if (phone) {
+							gsap.to(phone, {
+								yPercent: -8,
+								ease: 'none',
+								scrollTrigger: {
+									trigger: hero,
+									start: 'top top',
+									end: 'bottom top',
+									scrub: true,
+								},
+							})
+						}
+
+						// Subtle fade/translate of hero copy as the hero scrolls away.
+						// LCP-safe: starts visible (no opacity:0 on load), only moves on scroll.
+						const heroCopy = hero.querySelector('.max-w-7xl')
+						if (heroCopy) {
+							gsap.to(heroCopy, {
+								y: -40,
+								opacity: 0.55,
+								ease: 'none',
+								scrollTrigger: {
+									trigger: hero,
+									start: 'center center',
+									end: 'bottom top',
+									scrub: true,
+								},
+							})
+						}
+					}
+				}
+
+				/* ── 4. Staggered reveal-on-scroll for [data-reveal] blocks ─── */
+				const revealEls = gsap.utils.toArray('[data-reveal]')
+				if (revealEls.length) {
+					ScrollTrigger.batch(revealEls, {
+						start: 'top 88%',
+						once: true,
+						onEnter: (batch) =>
+							gsap.to(batch, {
+								opacity: 1,
+								y: 0,
+								duration: 0.6,
+								ease: 'power2.out',
+								stagger: 0.08,
+								overwrite: true,
+								onComplete: function () {
+									batch.forEach((el) => el.style.removeProperty('will-change'))
+								},
+							}),
+					})
+				}
+
+				/* ── 5. Animated number counters (STATS section, once) ──────── */
+				gsap.utils.toArray('[data-counter]').forEach((el) => {
+					const to = parseFloat(el.getAttribute('data-count-to') || '0')
+					const prefix = el.getAttribute('data-count-prefix') || ''
+					const suffix = el.getAttribute('data-count-suffix') || ''
+					const counter = { val: 0 }
+					gsap.to(counter, {
+						val: to,
+						duration: 1.4,
+						ease: 'power2.out',
+						scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+						onUpdate: () => {
+							el.textContent = prefix + Math.round(counter.val) + suffix
+						},
+						onComplete: () => {
+							el.textContent = prefix + to + suffix
+						},
+					})
+				})
+
+				/* ── 6. Pointer effects: 3D tilt on cards + magnetic CTA ────── */
+				if (isDesktop) {
+					const MAX_TILT = 6
+					document.querySelectorAll('.feature-card').forEach((card) => {
+						const quickX = gsap.quickTo(card, 'rotationY', {
+							duration: 0.4,
+							ease: 'power2.out',
+						})
+						const quickYr = gsap.quickTo(card, 'rotationX', {
+							duration: 0.4,
+							ease: 'power2.out',
+						})
+						card.addEventListener('pointermove', (e) => {
+							const r = card.getBoundingClientRect()
+							const px = (e.clientX - r.left) / r.width - 0.5
+							const py = (e.clientY - r.top) / r.height - 0.5
+							gsap.set(card, { transformPerspective: 700 })
+							quickX(px * MAX_TILT * 2)
+							quickYr(-py * MAX_TILT * 2)
+						})
+						card.addEventListener('pointerleave', () => {
+							quickX(0)
+							quickYr(0)
+						})
+					})
+
+					// Magnetic primary CTAs — translate a few px toward the cursor.
+					document.querySelectorAll('.btn-primary').forEach((btn) => {
+						const moveX = gsap.quickTo(btn, 'x', {
+							duration: 0.4,
+							ease: 'power3.out',
+						})
+						const moveY = gsap.quickTo(btn, 'y', {
+							duration: 0.4,
+							ease: 'power3.out',
+						})
+						btn.addEventListener('pointermove', (e) => {
+							const r = btn.getBoundingClientRect()
+							moveX((e.clientX - (r.left + r.width / 2)) * 0.25)
+							moveY((e.clientY - (r.top + r.height / 2)) * 0.35)
+						})
+						btn.addEventListener('pointerleave', () => {
+							moveX(0)
+							moveY(0)
+						})
+					})
+				}
+
+				// Recalculate triggers after fonts/images settle to avoid drift.
+				window.addEventListener('load', () => ScrollTrigger.refresh())
+			})
 		</script>
 	</body>
 </html>
