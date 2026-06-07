@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CRM для репетитора с голосовым ИИ — расписание, оплаты | Lessonify</title>
+		<meta
+			name="description"
+			content="Lessonify — CRM для частного репетитора: добавляйте и переносите уроки голосом (ИИ), учёт оплат и должников, ДЗ, напоминания в Telegram. Бесплатно до 5 учеников."
+		/>
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+		<meta name="theme-color" content="#1F4A3D" />
+		<link rel="canonical" href="https://lessonify.ru/" />
+		<meta name="google-site-verification" content="gp6OTXIHI8ZNMPHRRNuSXBbsO-mCkG8F3oJaK4_DGzo" />
+		<link rel="icon" type="image/png" href="logo.png?v=2" />
+		<link rel="apple-touch-icon" href="logo.png?v=2" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Lessonify" />
+		<meta property="og:title" content="CRM для частного репетитора с голосовым ИИ" />
+		<meta
+			property="og:description"
+			content="Добавляйте и переносите уроки голосом — ИИ сам поймёт ученика, дату и время. Учёт оплат и должников, ДЗ, напоминания в Telegram. Бесплатно до 5 учеников."
+		/>
+		<meta property="og:url" content="https://lessonify.ru/" />
+		<meta property="og:image" content="https://lessonify.ru/og-image.png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Lessonify — CRM для частного репетитора с голосовым ИИ-помощником" />
+		<meta property="og:locale" content="ru_RU" />
+
+		<!-- Twitter / X -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="CRM для частного репетитора с голосовым ИИ — Lessonify" />
+		<meta name="twitter:description" content="Добавляйте и переносите уроки голосом. Учёт оплат, должники, ДЗ, напоминания в Telegram. Бесплатно до 5 учеников." />
+		<meta name="twitter:image" content="https://lessonify.ru/og-image.png" />
+
+		<!-- Fonts: Unbounded (display, кириллица) + Golos Text (body, лучшая экранная кириллица) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			/* ─────────────────────────────────────────────────────────────
+			   Lessonify — «Тетрадь»: светлый учительский премиум-минимализм.
+			   Палитра 6 цветов, сосново-зелёный бренд, точечный клэй.
+			   Без Tailwind, без фиолетового, без blob/glow/градиент-текста.
+			   ───────────────────────────────────────────────────────────── */
+			:root {
+				--bg: #fbfaf7;
+				--surface: #ffffff;
+				--ink: #1a1916;
+				--muted: #6e6a60;
+				--muted-strong: #5e5a50;
+				--brand: #1f4a3d;
+				--brand-hover: #163a30;
+				--brand-tint: #e9f0ec;
+				--clay: #c9744b;
+				--clay-tint: #f6e9e1;
+				--border: #ece7dd;
+				--success: #2e7d52;
+				--debt: #c2362f;
+
+				--r-chip: 6px;
+				--r-ui: 10px;
+				--r-card: 18px;
+
+				--sh-1: 0 1px 2px rgba(26, 25, 22, 0.05);
+				--sh-2: 0 12px 32px rgba(26, 25, 22, 0.07);
+				--sh-3: 0 24px 60px rgba(26, 25, 22, 0.1);
+
+				--font-display: 'Unbounded', 'Trebuchet MS', system-ui, sans-serif;
+				--font-body: 'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+				--maxw: 1120px;
+				--pad: clamp(20px, 5vw, 48px);
+				--gap-section: clamp(88px, 12vw, 168px);
+			}
+
+			* { box-sizing: border-box; margin: 0; padding: 0; }
+
+			html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+			body {
+				font-family: var(--font-body);
+				background-color: var(--bg);
+				/* едва заметная тетрадная сетка — метафора «заменяем блокнот/Excel» */
+				background-image:
+					linear-gradient(to right, rgba(31, 74, 61, 0.04) 1px, transparent 1px),
+					linear-gradient(to bottom, rgba(31, 74, 61, 0.04) 1px, transparent 1px);
+				background-size: 28px 28px;
+				color: var(--ink);
+				font-size: 17px;
+				line-height: 1.6;
+				font-weight: 400;
+				-webkit-font-smoothing: antialiased;
+				text-rendering: optimizeLegibility;
+				overflow-x: hidden;
+			}
+
+			.num { font-variant-numeric: tabular-nums; }
+
+			h1, h2, h3, .display {
+				font-family: var(--font-display);
+				font-weight: 700;
+				line-height: 1.08;
+				letter-spacing: -0.02em;
+				color: var(--ink);
+			}
+			h1 { font-size: clamp(36px, 6.4vw, 62px); }
+			h2 { font-size: clamp(29px, 4.6vw, 44px); }
+			h3 { font-size: clamp(20px, 2.4vw, 25px); letter-spacing: -0.01em; }
+
+			p { color: var(--ink); }
+			.lead { font-size: clamp(17px, 2vw, 20px); color: var(--muted-strong); line-height: 1.55; }
+
+			a { color: inherit; text-decoration: none; }
+
+			.wrap { max-width: var(--maxw); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+			.eyebrow {
+				display: inline-block;
+				font-size: 13px;
+				font-weight: 600;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--brand);
+			}
+
+			.em-clay { color: var(--clay); font-style: italic; }
+
+			/* ── Buttons ───────────────────────────────────────────── */
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				font-family: var(--font-body);
+				font-weight: 600;
+				font-size: 16px;
+				min-height: 50px;
+				padding: 0 24px;
+				border-radius: var(--r-ui);
+				border: 1px solid transparent;
+				cursor: pointer;
+				transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+				white-space: nowrap;
+			}
+			.btn-primary { background: var(--brand); color: #fff; box-shadow: var(--sh-1); }
+			.btn-primary:hover { background: var(--brand-hover); box-shadow: var(--sh-2); }
+			.btn-ghost { background: transparent; border-color: var(--border); color: var(--ink); }
+			.btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+			.btn svg { width: 18px; height: 18px; }
+
+			.risk-line { font-size: 14px; color: var(--muted); margin-top: 14px; }
+			.risk-line b { color: var(--ink); font-weight: 600; }
+
+			/* ── Nav ───────────────────────────────────────────────── */
+			.nav {
+				position: sticky; top: 0; z-index: 50;
+				border-bottom: 1px solid transparent;
+				transition: background-color 0.25s, border-color 0.25s, backdrop-filter 0.25s;
+			}
+			.nav.scrolled {
+				background: rgba(251, 250, 247, 0.82);
+				backdrop-filter: saturate(160%) blur(12px);
+				-webkit-backdrop-filter: saturate(160%) blur(12px);
+				border-bottom-color: var(--border);
+			}
+			.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+			.brand-mark { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.02em; }
+			.brand-dot { width: 12px; height: 12px; border-radius: 4px; background: var(--brand); display: inline-block; }
+			.nav-links { display: flex; align-items: center; gap: 28px; }
+			.nav-links a { font-size: 15px; color: var(--muted-strong); font-weight: 500; transition: color 0.15s; }
+			.nav-links a:hover { color: var(--ink); }
+			.nav-cta { display: flex; align-items: center; gap: 14px; }
+			.nav-cta .login { font-size: 15px; font-weight: 500; color: var(--muted-strong); }
+			.nav-cta .login:hover { color: var(--ink); }
+			.burger { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
+			.burger span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; }
+			.burger span + span { margin-top: 5px; }
+
+			/* ── Hero ──────────────────────────────────────────────── */
+			.hero { padding-top: clamp(40px, 6vw, 80px); padding-bottom: var(--gap-section); }
+			.hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+			.hero h1 { margin: 18px 0 22px; }
+			.hero .lead { max-width: 30ch; }
+			.hero-quote {
+				display: inline; background: var(--clay-tint); color: var(--clay);
+				font-style: italic; padding: 0 6px; border-radius: 4px; box-decoration-break: clone;
+				-webkit-box-decoration-break: clone;
+			}
+			.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+
+			/* Device frame */
+			.device {
+				position: relative; width: 100%; max-width: 340px; margin: 0 auto;
+				background: #14130f; border-radius: 38px; padding: 12px;
+				box-shadow: var(--sh-3); border: 1px solid #2a2820;
+			}
+			.device-screen { background: var(--surface); border-radius: 28px; overflow: hidden; }
+			.scr-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 6px; font-size: 13px; font-weight: 600; color: var(--ink); }
+			.scr-top .dots { display: flex; gap: 4px; }
+			.scr-top .dots i { width: 6px; height: 6px; border-radius: 50%; background: #cfcabd; display: block; }
+			.scr-body { padding: 6px 16px 18px; }
+			.scr-h { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -0.02em; margin: 6px 0 2px; }
+			.scr-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+			.lesson-card { border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; background: var(--surface); }
+			.lesson-card.next { background: var(--brand-tint); border-color: #d6e4dd; }
+			.lc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+			.lc-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand); }
+			.lc-time { font-size: 11px; color: var(--muted); font-weight: 500; }
+			.lc-row { display: flex; align-items: center; gap: 10px; }
+			.avatar { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
+			.av-1 { background: #1f4a3d; } .av-2 { background: #c9744b; } .av-3 { background: #3a6ea5; }
+			.lc-name { font-size: 14px; font-weight: 600; }
+			.lc-meta { font-size: 11px; color: var(--muted); }
+			.pill { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+			.pill-paid { background: #e6f3ec; color: var(--success); }
+			.pill-debt { background: #fbe9e7; color: var(--debt); }
+			.scr-voicebtn { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; padding: 11px; border-radius: 12px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 600; }
+
+			/* ── Sections base ─────────────────────────────────────── */
+			section { position: relative; }
+			.section-pad { padding-top: var(--gap-section); }
+			.sec-head { max-width: 30ch; margin-bottom: clamp(36px, 5vw, 56px); }
+			.sec-head.center { max-width: 24ch; margin-left: auto; margin-right: auto; text-align: center; }
+			.sec-head .lead { margin-top: 16px; }
+
+			/* reveal */
+			.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1); }
+			.reveal.in { opacity: 1; transform: none; }
+
+			/* ── Voice AI demo ─────────────────────────────────────── */
+			.voice { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding-bottom: var(--gap-section); }
+			.voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
+			.voice-benefits { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+			.vb { display: flex; gap: 12px; align-items: flex-start; }
+			.vb-ic { width: 34px; height: 34px; border-radius: 9px; background: var(--brand-tint); color: var(--brand); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+			.vb-ic svg { width: 18px; height: 18px; }
+			.vb b { font-weight: 600; }
+			.vb p { font-size: 14px; color: var(--muted-strong); }
+
+			.demo {
+				background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-card);
+				padding: 22px; box-shadow: var(--sh-2); max-width: 420px; margin: 0 auto; width: 100%;
+			}
+			.demo-msg { display: flex; align-items: center; gap: 10px; background: var(--brand); color: #fff; border-radius: 14px 14px 14px 4px; padding: 11px 14px; width: fit-content; margin-left: auto; }
+			.wave { display: flex; align-items: center; gap: 3px; height: 20px; }
+			.wave i { width: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.85); animation: wave 1s ease-in-out infinite; }
+			.wave i:nth-child(2) { animation-delay: 0.1s; } .wave i:nth-child(3) { animation-delay: 0.2s; }
+			.wave i:nth-child(4) { animation-delay: 0.3s; } .wave i:nth-child(5) { animation-delay: 0.15s; }
+			.wave i:nth-child(6) { animation-delay: 0.25s; }
+			@keyframes wave { 0%,100% { height: 6px; } 50% { height: 18px; } }
+			.demo-timer { font-size: 12px; font-weight: 600; }
+			.demo-recognized { margin: 16px 0 4px; font-size: 15px; color: var(--muted-strong); min-height: 24px; }
+			.demo-recognized .cursor { display: inline-block; width: 2px; height: 1.05em; background: var(--clay); vertical-align: text-bottom; animation: blink 0.9s step-end infinite; }
+			@keyframes blink { 50% { opacity: 0; } }
+			.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; min-height: 30px; }
+			.chip { font-size: 13px; font-weight: 500; padding: 5px 11px; border-radius: var(--r-chip); background: var(--brand-tint); color: var(--brand); opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
+			.chip.show { opacity: 1; transform: none; }
+			.chip b { font-weight: 600; }
+			.demo-done { display: none; align-items: center; gap: 8px; background: #e6f3ec; color: var(--success); font-weight: 600; font-size: 14px; padding: 10px 14px; border-radius: 10px; margin-top: 6px; }
+			.demo-done.show { display: flex; }
+			.demo-actions { display: flex; gap: 10px; margin-top: 12px; opacity: 0; transition: opacity 0.3s; }
+			.demo-actions.show { opacity: 1; }
+			.demo-actions .btn { min-height: 40px; font-size: 14px; flex: 1; }
+			.demo-hint { font-size: 12px; color: var(--muted); margin-top: 12px; text-align: center; }
+			.demo-replay { background: none; border: 0; color: var(--brand); font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+
+			/* ── Bento / cards ─────────────────────────────────────── */
+			.bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+			.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card); padding: clamp(20px, 2.5vw, 30px); box-shadow: var(--sh-1); transition: box-shadow 0.25s, transform 0.25s; }
+			.card:hover { box-shadow: var(--sh-2); transform: translateY(-2px); }
+			.card .ic { width: 38px; height: 38px; color: var(--brand); margin-bottom: 16px; }
+			.card .ic svg { width: 28px; height: 28px; stroke-width: 1.5; }
+			.card h3 { margin-bottom: 8px; }
+			.card p { font-size: 15px; color: var(--muted-strong); }
+			.col-2 { grid-column: span 2; } .col-3 { grid-column: span 3; } .col-4 { grid-column: span 4; } .col-6 { grid-column: span 6; }
+			.card.feature-big { display: grid; grid-template-columns: 1fr; gap: 18px; }
+
+			.mini-ui { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-top: 16px; }
+			.mini-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 2px; font-size: 13px; }
+			.mini-row + .mini-row { border-top: 1px solid var(--border); }
+
+			/* ── Problem / Solution ────────────────────────────────── */
+			.ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+			.ps-col { border-radius: var(--r-card); padding: clamp(22px, 3vw, 32px); border: 1px solid var(--border); }
+			.ps-was { background: #faf6f0; }
+			.ps-now { background: var(--brand-tint); border-color: #d6e4dd; }
+			.ps-col h3 { margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+			.ps-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+			.ps-list li { display: flex; gap: 10px; font-size: 15px; align-items: flex-start; color: var(--muted-strong); }
+			.ps-list li svg { width: 19px; height: 19px; flex-shrink: 0; margin-top: 1px; }
+			.ps-was li svg { color: var(--debt); } .ps-now li svg { color: var(--success); }
+			.ps-now li { color: var(--ink); }
+
+			/* ── Aggregators economics ─────────────────────────────── */
+			.calc { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+			.calc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card); padding: 28px; }
+			.calc-card.bad { border-color: #f0d9d6; }
+			.calc-label { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+			.calc-num { font-family: var(--font-display); font-size: clamp(30px, 4vw, 42px); font-weight: 700; letter-spacing: -0.02em; }
+			.calc-card.bad .calc-num { color: var(--debt); }
+			.calc-card.good .calc-num { color: var(--brand); }
+			.calc-foot { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+			/* ── Comparison table ──────────────────────────────────── */
+			.cmp-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--r-card); background: var(--surface); box-shadow: var(--sh-1); }
+			table.cmp { width: 100%; border-collapse: collapse; min-width: 640px; }
+			.cmp th, .cmp td { padding: 16px 18px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--border); }
+			.cmp thead th { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+			.cmp thead th.us { color: var(--brand); }
+			.cmp tbody td:first-child { color: var(--muted-strong); font-weight: 500; }
+			.cmp td.us { background: var(--brand-tint); font-weight: 600; }
+			.cmp tr:last-child td { border-bottom: 0; }
+			.tick { color: var(--success); font-weight: 700; } .cross { color: var(--debt); }
+
+			/* ── Testimonials ──────────────────────────────────────── */
+			.tst-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+			.tst { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card); padding: 26px; box-shadow: var(--sh-1); }
+			.tst .stars { color: var(--clay); font-size: 14px; letter-spacing: 2px; margin-bottom: 12px; }
+			.tst blockquote { font-size: 16px; line-height: 1.55; margin-bottom: 18px; }
+			.tst-author { display: flex; align-items: center; gap: 11px; }
+			.tst-author .avatar { width: 38px; height: 38px; border-radius: 11px; }
+			.tst-name { font-size: 14px; font-weight: 600; }
+			.tst-role { font-size: 12px; color: var(--muted); }
+
+			/* ── Pricing ───────────────────────────────────────────── */
+			.price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 800px; margin: 0 auto; }
+			.price-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-card); padding: clamp(24px, 3vw, 34px); position: relative; }
+			.price-card.pro { border-color: var(--brand); box-shadow: var(--sh-2); }
+			.price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--clay); color: #fff; font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 20px; white-space: nowrap; }
+			.price-name { font-family: var(--font-display); font-size: 22px; font-weight: 700; }
+			.price-desc { font-size: 14px; color: var(--muted); margin: 4px 0 18px; }
+			.price-amount { font-family: var(--font-display); font-size: clamp(34px, 5vw, 46px); font-weight: 700; letter-spacing: -0.02em; }
+			.price-amount span { font-family: var(--font-body); font-size: 16px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+			.price-note { font-size: 13px; color: var(--brand); margin-top: 6px; min-height: 18px; }
+			.price-card .btn { width: 100%; margin: 20px 0; }
+			.price-feats { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+			.price-feats li { display: flex; gap: 10px; font-size: 14px; align-items: flex-start; color: var(--muted-strong); }
+			.price-feats li svg { width: 18px; height: 18px; color: var(--brand); flex-shrink: 0; margin-top: 1px; }
+			.consent { font-size: 12px; color: var(--muted); text-align: center; margin-top: 18px; }
+			.consent a { color: var(--brand); text-decoration: underline; }
+
+			/* ── FAQ ───────────────────────────────────────────────── */
+			.faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+			.faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-ui); overflow: hidden; }
+			.faq-q { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; background: none; border: 0; cursor: pointer; text-align: left; font-family: var(--font-body); font-size: 16px; font-weight: 600; color: var(--ink); }
+			.faq-q .pm { flex-shrink: 0; width: 20px; height: 20px; color: var(--brand); transition: transform 0.25s; }
+			.faq-item.open .faq-q .pm { transform: rotate(45deg); }
+			.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+			.faq-a-inner { padding: 0 20px 20px; font-size: 15px; color: var(--muted-strong); line-height: 1.6; }
+
+			/* ── Final CTA ─────────────────────────────────────────── */
+			.final { text-align: center; padding-bottom: var(--gap-section); }
+			.final .wrap { max-width: 720px; }
+			.final h2 { margin-bottom: 18px; }
+
+			/* ── Footer ────────────────────────────────────────────── */
+			.footer { background: #f3efe7; border-top: 1px solid var(--border); padding: clamp(48px, 7vw, 80px) 0 40px; }
+			.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; margin-bottom: 40px; }
+			.foot-col h4 { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+			.foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+			.foot-col a, .foot-col li { font-size: 14px; color: var(--muted-strong); }
+			.foot-col a:hover { color: var(--ink); }
+			.foot-about p { font-size: 14px; color: var(--muted-strong); margin-top: 12px; max-width: 30ch; }
+			.foot-legal { border-top: 1px solid var(--border); padding-top: 24px; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+			.foot-legal .reqs { max-width: 60ch; }
+
+			/* ── Mobile sticky CTA ─────────────────────────────────── */
+			.sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: rgba(251, 250, 247, 0.94); backdrop-filter: blur(10px); border-top: 1px solid var(--border); display: none; }
+			.sticky-cta .btn { width: 100%; }
+			.sticky-cta.show { display: block; }
+
+			/* ── Responsive ────────────────────────────────────────── */
+			@media (max-width: 900px) {
+				.nav-links { display: none; }
+				.nav-cta .login { display: none; }
+				.burger { display: block; }
+				.hero-grid, .voice-grid { grid-template-columns: 1fr; }
+				.hero .lead { max-width: none; }
+				.device { margin-top: 12px; order: -1; max-width: 300px; }
+				.bento { grid-template-columns: repeat(2, 1fr); }
+				.col-2, .col-3, .col-4, .col-6 { grid-column: span 2; }
+				.ps-grid, .calc, .tst-grid, .price-grid { grid-template-columns: 1fr; }
+				.foot-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+				.sticky-cta.show { display: block; }
+			}
+			@media (max-width: 540px) {
+				body { background-size: 22px 22px; }
+				.bento { grid-template-columns: 1fr; }
+				.col-2, .col-3, .col-4, .col-6 { grid-column: span 1; }
+				.foot-grid { grid-template-columns: 1fr; }
+				.hero-actions .btn { width: 100%; }
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				* { animation: none !important; transition: none !important; scroll-behavior: auto; }
+				.reveal { opacity: 1; transform: none; }
+			}
+		</style>
+	</head>
+	<body>
+		<!-- ── Nav ───────────────────────────────────────────────── -->
+		<nav class="nav" id="nav">
+			<div class="wrap nav-inner">
+				<a href="#" class="brand-mark"><span class="brand-dot"></span>Lessonify</a>
+				<div class="nav-links">
+					<a href="#voice">Голосовой ИИ</a>
+					<a href="#features">Возможности</a>
+					<a href="#compare">Сравнение</a>
+					<a href="#pricing">Тарифы</a>
+					<a href="#faq">FAQ</a>
+				</div>
+				<div class="nav-cta">
+					<a href="https://app.lessonify.ru/auth/login" class="login">Войти</a>
+					<a href="https://app.lessonify.ru" class="btn btn-primary">Начать бесплатно</a>
+					<button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+				</div>
+			</div>
+		</nav>
+
+		<!-- ── Hero ──────────────────────────────────────────────── -->
+		<header class="hero">
+			<div class="wrap hero-grid">
+				<div class="hero-text reveal">
+					<span class="eyebrow">CRM для частного репетитора</span>
+					<h1>
+						Перенесите урок <span class="hero-quote">голосом</span> за 5 секунд
+					</h1>
+					<p class="lead">
+						Скажите боту: «перенеси Аню на четверг в 18:00» — и урок уже в расписании.
+						Оплаты, должники и напоминания в Telegram — без Excel и блокнота.
+					</p>
+					<div class="hero-actions">
+						<a href="https://app.lessonify.ru" class="btn btn-primary">
+							Начать бесплатно
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</a>
+						<a href="#voice" class="btn btn-ghost">Как работает голос ↓</a>
+					</div>
+					<p class="risk-line">Без карты · <b>Бесплатно навсегда до 5 учеников</b> · 1 минута на старт</p>
+				</div>
+
+				<div class="hero-device reveal">
+					<div class="device">
+						<div class="device-screen">
+							<div class="scr-top"><span class="num">9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+							<div class="scr-body">
+								<div class="scr-h">Сегодня, 12 июня</div>
+								<div class="scr-sub">Добрый день, Иван 👋</div>
+
+								<div class="lesson-card next">
+									<div class="lc-top"><span class="lc-label">Ближайший урок</span><span class="lc-time num">через 45 мин</span></div>
+									<div class="lc-row">
+										<span class="avatar av-1">АС</span>
+										<div><div class="lc-name">Аня Смирнова</div><div class="lc-meta num">Английский · 14:00–15:00</div></div>
+									</div>
+								</div>
+
+								<div class="lesson-card">
+									<div class="lc-row" style="justify-content: space-between">
+										<div class="lc-row">
+											<span class="avatar av-2">ЕК</span>
+											<div><div class="lc-name">Егор Климов</div><div class="lc-meta num">ЕГЭ матем · 16:00</div></div>
+										</div>
+										<span class="pill pill-paid">✓ оплачено</span>
+									</div>
+								</div>
+
+								<div class="lesson-card">
+									<div class="lc-row" style="justify-content: space-between">
+										<div class="lc-row">
+											<span class="avatar av-3">МИ</span>
+											<div><div class="lc-name">Маша Иванова</div><div class="lc-meta num">Английский · 18:30</div></div>
+										</div>
+										<span class="pill pill-debt">долг 1 500 ₽</span>
+									</div>
+								</div>
+
+								<div class="scr-voicebtn">
+									<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4" stroke-linecap="round"/></svg>
+									Добавить урок голосом
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<!-- ── Voice AI ──────────────────────────────────────────── -->
+		<section class="voice section-pad" id="voice">
+			<div class="wrap voice-grid">
+				<div class="reveal">
+					<span class="eyebrow">Голосовой ИИ-помощник</span>
+					<h2 style="margin: 14px 0 18px">Добавляйте и переносите уроки голосом, а не руками</h2>
+					<p class="lead">
+						Скажите голосом — ИИ сам поймёт ученика, дату и время и поставит урок в расписание.
+						Вы только подтверждаете. Распознаёт даже перенос — самый частый кейс репетитора.
+					</p>
+					<div class="voice-benefits">
+						<div class="vb">
+							<span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg></span>
+							<div><b>~5 секунд на урок</b><p>Вместо ручного заполнения полей</p></div>
+						</div>
+						<div class="vb">
+							<span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10" stroke-linecap="round"/></svg></span>
+							<div><b>2 минуты в день вместо таблиц</b><p>Всё расписание ведётся между делом</p></div>
+						</div>
+						<div class="vb">
+							<span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h4l3 8 4-16 3 8h4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+							<div><b>Понимает перенос</b><p>«перенеси Машу на четверг в шесть» — готово</p></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="reveal">
+					<div class="demo" id="demo">
+						<div class="demo-msg">
+							<div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+							<span class="demo-timer num" id="demoTimer">0:03</span>
+						</div>
+						<p class="demo-recognized" id="demoText"></p>
+						<div class="chips" id="demoChips">
+							<span class="chip"><b>Ученик:</b> Маша</span>
+							<span class="chip"><b>Дата:</b> чт, 12 июня</span>
+							<span class="chip"><b>Время:</b> 18:00</span>
+							<span class="chip"><b>Предмет:</b> Английский</span>
+						</div>
+						<div class="demo-done" id="demoDone">
+							<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							Урок перенесён в расписание
+						</div>
+						<div class="demo-actions" id="demoActions">
+							<span class="btn btn-primary">Подтвердить</span>
+							<span class="btn btn-ghost">Изменить</span>
+						</div>
+						<p class="demo-hint">Не расслышал — всегда можно поправить текстом · <button class="demo-replay" id="demoReplay">↻ ещё раз</button></p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Benefits ──────────────────────────────────────────── -->
+		<section class="section-pad">
+			<div class="wrap">
+				<div class="sec-head reveal">
+					<span class="eyebrow">Зачем это вам</span>
+					<h2 style="margin-top: 14px">Меньше рутины, больше контроля над деньгами и расписанием</h2>
+				</div>
+				<div class="bento">
+					<div class="card col-3 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7h18M3 12h18M3 17h12" stroke-linecap="round"/><circle cx="19" cy="17" r="2"/></svg></div>
+						<h3>Не теряете оплаты и должников</h3>
+						<p>Кто заплатил, кто должен — всегда на виду. Список должников в один клик, без неловких «вы не забыли оплатить?».</p>
+						<div class="mini-ui">
+							<div class="mini-row"><span>Егор Климов · ЕГЭ</span><span class="pill pill-paid">✓ 2 000 ₽</span></div>
+							<div class="mini-row"><span>Маша Иванова · англ</span><span class="pill pill-debt num">долг 1 500 ₽</span></div>
+						</div>
+					</div>
+					<div class="card col-3 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4" stroke-linecap="round"/></svg></div>
+						<h3>Урок ставится голосом за секунды</h3>
+						<p>Сказали — ИИ распознал ученика, дату и время и добавил в расписание. Это и есть «вести CRM между делом».</p>
+						<div class="mini-ui">
+							<div class="mini-row"><span>🎙 «поставь Аню в пятницу в 5»</span><span class="pill pill-paid">→ урок</span></div>
+						</div>
+					</div>
+					<div class="card col-3 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+						<h3>Напоминания в Telegram — автоматически</h3>
+						<p>Ученики и родители получают напоминание об уроке и оплате. Реже пропуски, меньше «а когда занятие?».</p>
+					</div>
+					<div class="card col-3 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18" stroke-linecap="round"/><path d="M7 14l4-4 3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+						<h3>Видите доход за месяц</h3>
+						<p>Сколько заработали, кто должен, динамика дохода — наглядная аналитика вместо подсчётов в голове.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Problem / Solution ────────────────────────────────── -->
+		<section class="section-pad">
+			<div class="wrap">
+				<div class="sec-head reveal">
+					<span class="eyebrow">Знакомо?</span>
+					<h2 style="margin-top: 14px">Excel, блокнот и забытые оплаты крадут время и деньги — Lessonify это убирает</h2>
+				</div>
+				<div class="ps-grid">
+					<div class="ps-col ps-was reveal">
+						<h3>❌ Как было</h3>
+						<ul class="ps-list">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg> Расписание в трёх таблицах и заметках — легко запутаться</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg> Не помните, кто заплатил, а кто должен</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg> Неловко вручную напоминать про долги и уроки</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg> Ученики забывают и пропускают занятия</li>
+						</ul>
+					</div>
+					<div class="ps-col ps-now reveal">
+						<h3>✓ С Lessonify</h3>
+						<ul class="ps-list">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Всё расписание на одном экране, урок ставится голосом</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Учёт оплат и должников ведётся сам</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Напоминания об уроке и оплате уходят автоматически</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Доход и аналитика — наглядно, в пару кликов</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Features bento ────────────────────────────────────── -->
+		<section class="section-pad" id="features">
+			<div class="wrap">
+				<div class="sec-head reveal">
+					<span class="eyebrow">Возможности</span>
+					<h2 style="margin-top: 14px">Всё для частного репетитора в одном месте: расписание, оплаты, ДЗ, кабинет ученика</h2>
+				</div>
+				<div class="bento">
+					<div class="card col-4 feature-big reveal">
+						<div>
+							<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4" stroke-linecap="round"/></svg></div>
+							<h3>Голосовой ввод и перенос уроков</h3>
+							<p>Главная фишка Lessonify. Скажите боту в Telegram, что и когда — ИИ распознает речь, поймёт ученика, дату и время и поставит урок. Перенос, отмена, новый урок — всё голосом.</p>
+						</div>
+						<div class="mini-ui">
+							<div class="mini-row"><span>🎙 «перенеси Машу на четверг в шесть»</span></div>
+							<div class="mini-row"><span style="color: var(--brand); font-weight: 600">✓ Урок перенесён на чт, 18:00</span></div>
+						</div>
+					</div>
+					<div class="card col-2 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-linecap="round"/></svg></div>
+						<h3>Умное расписание</h3>
+						<p>Все уроки по дням или месяцу. Предупреждает о накладках.</p>
+					</div>
+					<div class="card col-2 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6" stroke-linecap="round"/></svg></div>
+						<h3>База учеников</h3>
+						<p>Карточка с историей уроков, ДЗ, заметками и статусом оплат.</p>
+					</div>
+					<div class="card col-2 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 3v5h5M8 13h8M8 17h5" stroke-linecap="round"/></svg></div>
+						<h3>Домашние задания</h3>
+						<p>Задавайте ДЗ к уроку. Ученик сдаёт через приложение, вы видите статус.</p>
+					</div>
+					<div class="card col-3 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6" stroke-linecap="round"/></svg></div>
+						<h3>Кабинет ученика по ссылке</h3>
+						<p>Пригласите ученика ссылкой — он сам видит расписание и задания. Родители перестают писать «а когда урок?».</p>
+					</div>
+					<div class="card col-3 reveal">
+						<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18" stroke-linecap="round"/><path d="M7 14l4-4 3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+						<h3>Финансы и Google Calendar</h3>
+						<p>Доход за месяц, должники, аналитика. Синхронизация с Google Calendar и инвойсы PDF — на тарифе Pro.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Aggregators ───────────────────────────────────────── -->
+		<section class="section-pad">
+			<div class="wrap">
+				<div class="sec-head reveal">
+					<span class="eyebrow">Свои ученики</span>
+					<h2 style="margin-top: 14px">Перестаньте отдавать агрегаторам 20–30% комиссии за своих же учеников</h2>
+					<p class="lead">
+						Profi.ru и Repetit зарабатывают на ваших учениках год за годом. Ведите их сами в Lessonify —
+						фиксированные 499 ₽/мес без процентов, а контакты и история остаются вашими навсегда.
+					</p>
+				</div>
+				<div class="calc">
+					<div class="calc-card bad reveal">
+						<div class="calc-label">Агрегатор: 20–30% с каждого урока</div>
+						<div class="calc-num num">~30 000 ₽</div>
+						<div class="calc-foot">в год комиссии с 10 учеников по 1 500 ₽/урок — и так каждый год</div>
+					</div>
+					<div class="calc-card good reveal">
+						<div class="calc-label">Lessonify Pro: фиксированно</div>
+						<div class="calc-num num">5 988 ₽</div>
+						<div class="calc-foot">499 ₽ × 12 месяцев, без процентов. Окупается со 2-го ученика</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Comparison ────────────────────────────────────────── -->
+		<section class="section-pad" id="compare">
+			<div class="wrap">
+				<div class="sec-head reveal">
+					<span class="eyebrow">Сравнение</span>
+					<h2 style="margin-top: 14px">Lessonify против Excel, школьных CRM и агрегаторов — что выбрать одному репетитору</h2>
+				</div>
+				<div class="cmp-wrap reveal">
+					<table class="cmp">
+						<thead>
+							<tr>
+								<th></th>
+								<th class="us">Lessonify</th>
+								<th>Excel / блокнот</th>
+								<th>Школьные CRM</th>
+								<th>Агрегаторы</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>Для одного репетитора</td><td class="us"><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="cross">для центров</span></td><td><span class="cross">✕</span></td></tr>
+							<tr><td>Голосовой ввод уроков (ИИ)</td><td class="us"><span class="tick">✓</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+							<tr><td>Учёт оплат и должников</td><td class="us"><span class="tick">✓</span></td><td><span class="cross">вручную</span></td><td><span class="tick">✓</span></td><td><span class="cross">✕</span></td></tr>
+							<tr><td>Напоминания в Telegram</td><td class="us"><span class="tick">✓</span></td><td><span class="cross">✕</span></td><td><span class="cross">редко</span></td><td><span class="cross">✕</span></td></tr>
+							<tr><td>Комиссия с ваших учеников</td><td class="us">нет</td><td>нет</td><td>нет</td><td class="cross">20–30%</td></tr>
+							<tr><td>Цена в месяц</td><td class="us num">0–499 ₽</td><td>0 ₽</td><td class="num">990–2 600 ₽</td><td class="cross">% с урока</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Testimonials ──────────────────────────────────────── -->
+		<section class="section-pad">
+			<div class="wrap">
+				<div class="sec-head center reveal">
+					<span class="eyebrow">Отзывы</span>
+					<h2 style="margin-top: 14px">Что говорят репетиторы, которые перешли на Lessonify</h2>
+				</div>
+				<div class="tst-grid">
+					<div class="tst reveal">
+						<div class="stars">★★★★★</div>
+						<blockquote>«Наконец-то не путаюсь, кто заплатил. Вся история по каждому ученику — за 2 секунды. Рекомендую всем коллегам.»</blockquote>
+						<div class="tst-author"><span class="avatar av-1">ЕК</span><div><div class="tst-name">Екатерина К.</div><div class="tst-role">Репетитор математики, Москва</div></div></div>
+					</div>
+					<div class="tst reveal">
+						<div class="stars">★★★★★</div>
+						<blockquote>«Ученики стали реже пропускать — Telegram-напоминания работают лучше, чем я вручную. Экономлю час в день точно.»</blockquote>
+						<div class="tst-author"><span class="avatar av-2">АВ</span><div><div class="tst-name">Александр В.</div><div class="tst-role">Репетитор английского, СПб</div></div></div>
+					</div>
+					<div class="tst reveal">
+						<div class="stars">★★★★★</div>
+						<blockquote>«Работаю с 18 учениками, раньше вела три таблицы. Теперь всё в одном месте, узнаю заработок за пару секунд.»</blockquote>
+						<div class="tst-author"><span class="avatar av-3">НС</span><div><div class="tst-name">Наталья С.</div><div class="tst-role">Репетитор русского, Казань</div></div></div>
+					</div>
+					<div class="tst reveal">
+						<div class="stars">★★★★★</div>
+						<blockquote>«Ученик видит расписание и ДЗ сам, родители перестали писать "а когда урок?". А уроки добавляю голосом — это вообще огонь.»</blockquote>
+						<div class="tst-author"><span class="avatar av-1">МП</span><div><div class="tst-name">Михаил П.</div><div class="tst-role">Репетитор физики, Новосибирск</div></div></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Pricing ───────────────────────────────────────────── -->
+		<section class="section-pad" id="pricing">
+			<div class="wrap">
+				<div class="sec-head center reveal">
+					<span class="eyebrow">Тарифы</span>
+					<h2 style="margin-top: 14px">Бесплатно до 5 учеников, Pro — 499 ₽/мес без комиссии</h2>
+					<p class="lead">Начните бесплатно. Переходите на Pro, когда будете готовы.</p>
+				</div>
+				<div class="price-grid">
+					<div class="price-card reveal">
+						<div class="price-name">Бесплатно</div>
+						<div class="price-desc">Для старта и знакомства с приложением</div>
+						<div class="price-amount num">0 ₽<span> / навсегда</span></div>
+						<div class="price-note">Без карты</div>
+						<a href="https://app.lessonify.ru" class="btn btn-ghost">Начать бесплатно</a>
+						<ul class="price-feats">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> До 5 учеников</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Расписание и учёт оплат</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Голосовой ввод уроков</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Telegram-напоминания</li>
+						</ul>
+					</div>
+					<div class="price-card pro reveal">
+						<div class="price-badge">★ Окупается со 2-го ученика</div>
+						<div class="price-name">Pro</div>
+						<div class="price-desc">Для серьёзной работы с учениками</div>
+						<div class="price-amount num">499 ₽<span> / месяц</span></div>
+						<div class="price-note">3 990 ₽ в год — 2 месяца бесплатно</div>
+						<a href="https://app.lessonify.ru" class="btn btn-primary">Подключить Pro</a>
+						<ul class="price-feats">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Неограниченное число учеников</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Инвойсы PDF + финансовая аналитика</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Синхронизация с Google Calendar</li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Онлайн-запись и журнал с заметками</li>
+						</ul>
+					</div>
+				</div>
+				<p class="consent">Регистрируясь, вы соглашаетесь с <a href="/offer">офертой</a> и <a href="/privacy">политикой конфиденциальности</a>.</p>
+			</div>
+		</section>
+
+		<!-- ── FAQ ───────────────────────────────────────────────── -->
+		<section class="section-pad" id="faq">
+			<div class="wrap">
+				<div class="sec-head center reveal">
+					<span class="eyebrow">FAQ</span>
+					<h2 style="margin-top: 14px">Частые вопросы о Lessonify для репетиторов</h2>
+				</div>
+				<div class="faq-list">
+					<div class="faq-item reveal">
+						<button class="faq-q">А если я не технарь?<svg class="pm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+						<div class="faq-a"><div class="faq-a-inner">В этом и смысл. Урок добавляется голосом или в пару тапов, всё работает с телефона. Если привыкли к Excel — освоитесь за вечер, а скорее за 5 минут.</div></div>
+					</div>
+					<div class="faq-item reveal">
+						<button class="faq-q">Как работает голосовой ввод?<svg class="pm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+						<div class="faq-a"><div class="faq-a-inner">Отправляете боту в Telegram голосовое — например «перенеси Машу на четверг в шесть». ИИ распознаёт речь, находит ученика, понимает дату и время и показывает готовый урок с кнопкой «Подтвердить». Если что-то не так — поправите текстом.</div></div>
+					</div>
+					<div class="faq-item reveal">
+						<button class="faq-q">Точно бесплатно для первых 5 учеников?<svg class="pm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+						<div class="faq-a"><div class="faq-a-inner">Да, навсегда и без карты. Расписание, учёт оплат, голосовой ввод и Telegram-напоминания доступны бесплатно. Pro нужен, когда учеников больше 5 или нужны PDF-инвойсы и Google Calendar.</div></div>
+					</div>
+					<div class="faq-item reveal">
+						<button class="faq-q">Можно перенести учеников из Excel?<svg class="pm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+						<div class="faq-a"><div class="faq-a-inner">Да. Учеников можно завести вручную за минуту или добавить голосом по ходу. Никаких сложных импортов — большинство репетиторов просто начинают вести новых учеников в Lessonify.</div></div>
+					</div>
+					<div class="faq-item reveal">
+						<button class="faq-q">Мои данные в безопасности?<svg class="pm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+						<div class="faq-a"><div class="faq-a-inner">Контакты и история учеников хранятся у вас в аккаунте, а не у платформы-агрегатора. Никто не встаёт между вами и учеником и не заберёт вашу базу.</div></div>
+					</div>
+					<div class="faq-item reveal">
+						<button class="faq-q">Нужно ли скачивать приложение из App Store?<svg class="pm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+						<div class="faq-a"><div class="faq-a-inner">Нет. Lessonify работает прямо в браузере и устанавливается как приложение (PWA) одним нажатием, а уроки можно добавлять через Telegram-бот. App Store не нужен.</div></div>
+					</div>
+					<div class="faq-item reveal">
+						<button class="faq-q">Можно ли отменить Pro и вернуться на бесплатный?<svg class="pm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+						<div class="faq-a"><div class="faq-a-inner">Да, в любой момент, без штрафов. Данные остаются с вами, просто снова действуют лимиты бесплатного тарифа.</div></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ── Final CTA ─────────────────────────────────────────── -->
+		<section class="final section-pad">
+			<div class="wrap reveal">
+				<span class="eyebrow">Начните сегодня</span>
+				<h2 style="margin-top: 14px">Начните вести учеников и оплаты в Lessonify — бесплатно за 1 минуту</h2>
+				<p class="lead" style="margin: 0 auto 8px; max-width: 46ch">Никаких карт и обязательств. Первый урок можно поставить голосом прямо сейчас.</p>
+				<div class="hero-actions" style="justify-content: center">
+					<a href="https://app.lessonify.ru" class="btn btn-primary">
+						Начать бесплатно
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+					</a>
+					<a href="https://t.me/lessonify_bot" class="btn btn-ghost">Открыть Telegram-бот</a>
+				</div>
+				<p class="risk-line">Без карты · <b>Бесплатно навсегда до 5 учеников</b></p>
+			</div>
+		</section>
+
+		<!-- ── Footer ────────────────────────────────────────────── -->
+		<footer class="footer">
+			<div class="wrap">
+				<div class="foot-grid">
+					<div class="foot-col foot-about">
+						<a href="#" class="brand-mark"><span class="brand-dot"></span>Lessonify</a>
+						<p>CRM для частного репетитора: расписание, оплаты, ДЗ и голосовой ввод уроков в одном месте.</p>
+					</div>
+					<div class="foot-col">
+						<h4>Продукт</h4>
+						<ul>
+							<li><a href="#voice">Голосовой ИИ</a></li>
+							<li><a href="#features">Возможности</a></li>
+							<li><a href="#pricing">Тарифы</a></li>
+							<li><a href="#faq">FAQ</a></li>
+						</ul>
+					</div>
+					<div class="foot-col">
+						<h4>Приложение</h4>
+						<ul>
+							<li><a href="https://app.lessonify.ru">Веб-приложение</a></li>
+							<li><a href="https://t.me/lessonify_bot">Telegram-бот</a></li>
+							<li><a href="https://app.lessonify.ru/auth/login">Войти</a></li>
+						</ul>
+					</div>
+					<div class="foot-col">
+						<h4>Документы</h4>
+						<ul>
+							<li><a href="/offer">Публичная оферта</a></li>
+							<li><a href="/privacy">Политика конфиденциальности</a></li>
+							<li>Email: jukov0411200303@gmail.com</li>
+						</ul>
+					</div>
+				</div>
+				<div class="foot-legal">
+					<span class="reqs">Самозанятый · Жуков Иван Андреевич · ИНН 434566912109</span>
+					<span>© 2026 Lessonify. Все права защищены.</span>
+				</div>
+			</div>
+		</footer>
+
+		<!-- ── Mobile sticky CTA ─────────────────────────────────── -->
+		<div class="sticky-cta" id="stickyCta">
+			<a href="https://app.lessonify.ru" class="btn btn-primary">Начать бесплатно · до 5 учеников free</a>
+		</div>
+
+		<!-- ── JSON-LD ───────────────────────────────────────────── -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Organization",
+				"name": "Lessonify",
+				"url": "https://lessonify.ru",
+				"logo": "https://lessonify.ru/logo.png",
+				"founder": { "@type": "Person", "name": "Жуков Иван Андреевич" }
+			}
+		</script>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				"name": "Lessonify",
+				"url": "https://lessonify.ru"
+			}
+		</script>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "SoftwareApplication",
+				"name": "Lessonify",
+				"applicationCategory": "BusinessApplication",
+				"operatingSystem": "Web, iOS, Android (PWA), Telegram",
+				"description": "CRM для частного репетитора с голосовым ИИ-помощником: добавление и перенос уроков голосом, учёт оплат и должников, расписание, домашние задания, кабинет ученика, напоминания в Telegram.",
+				"featureList": [
+					"Голосовое добавление и перенос уроков (ИИ, распознавание речи)",
+					"Умное расписание уроков",
+					"Учёт оплат и должников",
+					"Домашние задания для учеников",
+					"Кабинет ученика по ссылке",
+					"Напоминания об уроках и оплате в Telegram",
+					"Финансовая аналитика и доход за месяц",
+					"Синхронизация с Google Calendar"
+				],
+				"offers": [
+					{ "@type": "Offer", "name": "Бесплатно", "price": "0", "priceCurrency": "RUB", "description": "До 5 учеников навсегда" },
+					{ "@type": "Offer", "name": "Pro", "price": "499", "priceCurrency": "RUB", "description": "Неограниченно учеников, в месяц" }
+				]
+			}
+		</script>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "FAQPage",
+				"mainEntity": [
+					{ "@type": "Question", "name": "Как работает голосовой ввод уроков?", "acceptedAnswer": { "@type": "Answer", "text": "Отправляете боту в Telegram голосовое сообщение, например «перенеси Машу на четверг в шесть». ИИ распознаёт речь, находит ученика, понимает дату и время и показывает готовый урок с кнопкой подтверждения." } },
+					{ "@type": "Question", "name": "Точно бесплатно для первых 5 учеников?", "acceptedAnswer": { "@type": "Answer", "text": "Да, навсегда и без карты. Расписание, учёт оплат, голосовой ввод и Telegram-напоминания доступны бесплатно до 5 учеников." } },
+					{ "@type": "Question", "name": "Нужно ли скачивать приложение из App Store?", "acceptedAnswer": { "@type": "Answer", "text": "Нет. Lessonify работает в браузере и устанавливается как PWA, а уроки можно добавлять через Telegram-бот." } },
+					{ "@type": "Question", "name": "Можно ли отменить Pro?", "acceptedAnswer": { "@type": "Answer", "text": "Да, в любой момент без штрафов. Данные остаются с вами, снова действуют лимиты бесплатного тарифа." } }
+				]
+			}
+		</script>
+
+		<!-- ── JS: nav, reveal, FAQ, voice demo, sticky CTA ──────── -->
+		<script>
+			(function () {
+				var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+				// Nav blur on scroll + sticky mobile CTA
+				var nav = document.getElementById('nav');
+				var sticky = document.getElementById('stickyCta');
+				function onScroll() {
+					var y = window.scrollY;
+					nav.classList.toggle('scrolled', y > 12);
+					if (window.innerWidth <= 900) sticky.classList.toggle('show', y > 600);
+					else sticky.classList.remove('show');
+				}
+				window.addEventListener('scroll', onScroll, { passive: true });
+				window.addEventListener('resize', onScroll);
+				onScroll();
+
+				// Burger → smooth scroll menu (simple: jump to features)
+				var burger = document.getElementById('burger');
+				if (burger) burger.addEventListener('click', function () { document.getElementById('features').scrollIntoView({ behavior: 'smooth' }); });
+
+				// Scroll reveal
+				if (!reduce && 'IntersectionObserver' in window) {
+					var io = new IntersectionObserver(function (entries) {
+						entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+					}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+					document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+				} else {
+					document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+				}
+
+				// FAQ accordion
+				document.querySelectorAll('.faq-item').forEach(function (item) {
+					var q = item.querySelector('.faq-q');
+					var a = item.querySelector('.faq-a');
+					q.addEventListener('click', function () {
+						var open = item.classList.toggle('open');
+						a.style.maxHeight = open ? a.scrollHeight + 'px' : '0';
+					});
+				});
+
+				// Voice demo sequence
+				var demo = document.getElementById('demo');
+				var textEl = document.getElementById('demoText');
+				var chips = document.querySelectorAll('#demoChips .chip');
+				var done = document.getElementById('demoDone');
+				var actions = document.getElementById('demoActions');
+				var timer = document.getElementById('demoTimer');
+				var replay = document.getElementById('demoReplay');
+				var phrase = 'перенеси Машу на четверг в шесть';
+				var timers = [];
+				function clearAll() { timers.forEach(clearTimeout); timers = []; }
+				function reset() {
+					clearAll();
+					textEl.innerHTML = '';
+					chips.forEach(function (c) { c.classList.remove('show'); });
+					done.classList.remove('show');
+					actions.classList.remove('show');
+					timer.textContent = '0:03';
+				}
+				function play() {
+					reset();
+					if (reduce) { showFinal(); return; }
+					var i = 0;
+					function type() {
+						if (i <= phrase.length) {
+							textEl.innerHTML = phrase.slice(0, i) + '<span class="cursor"></span>';
+							i++;
+							timers.push(setTimeout(type, 48));
+						} else {
+							textEl.textContent = phrase;
+							chips.forEach(function (c, idx) { timers.push(setTimeout(function () { c.classList.add('show'); }, 250 + idx * 280)); });
+							timers.push(setTimeout(function () { done.classList.add('show'); actions.classList.add('show'); }, 250 + chips.length * 280 + 350));
+						}
+					}
+					timers.push(setTimeout(type, 900));
+				}
+				function showFinal() {
+					textEl.textContent = phrase;
+					chips.forEach(function (c) { c.classList.add('show'); });
+					done.classList.add('show');
+					actions.classList.add('show');
+				}
+				if (replay) replay.addEventListener('click', play);
+				// Start when visible
+				if ('IntersectionObserver' in window) {
+					var dio = new IntersectionObserver(function (entries) {
+						entries.forEach(function (e) { if (e.isIntersecting) { play(); dio.unobserve(e.target); } });
+					}, { threshold: 0.4 });
+					dio.observe(demo);
+				} else { showFinal(); }
+			})();
+		</script>
+
+		<!-- Yandex.Metrika counter -->
+		<script type="text/javascript">
+			(function(m,e,t,r,i,k,a){
+				m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+				m[i].l=1*new Date();
+				for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+				k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+			})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109711502', 'ym');
+
+			ym(109711502, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+		</script>
+		<noscript><div><img src="https://mc.yandex.ru/watch/109711502" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+		<!-- /Yandex.Metrika counter -->
+	</body>
+</html>
